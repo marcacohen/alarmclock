@@ -36,8 +36,8 @@ body {
   overflow-y: auto;
 }
 body {
-  background-image: url("https://i.imgur.com/74FgIYl.png"), -webkit-gradient(linear, left top, left bottom, from(#404040), to(#262626));
-  background-image: url("https://i.imgur.com/74FgIYl.png"), linear-gradient(to bottom, #404040, #262626);
+  background-image: url("https://mco.dev/img/alaska.jpg"), -webkit-gradient(linear, left top, left bottom, from(#404040), to(#262626));
+  background-image: url("https://mco.dev/img/alaska.jpg"), linear-gradient(to bottom, #404040, #262626);
   background-color: #333;
   background-repeat: no-repeat;
   background-attachment: fixed;
