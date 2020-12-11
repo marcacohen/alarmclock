@@ -1,0 +1,83 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+<script>
+
+let devid = '';
+const client_id = '98295ad63a114cf39825490f37281c36';
+const client_secret = '20af90e0731e4d7faf303d23deeac162';
+
+function getToken() {
+  $.ajax({
+    asynch: false,
+    url: 'https://accounts.spotify.com/api/token',
+    type: 'POST',
+    data: 'grant_type=client_credentials',
+    beforeSend: function(xhr) {
+      let creds = btoa(client_id + ':' + client_secret);
+      xhr.setRequestHeader('Authorization', 'Basic ' + creds);
+    },
+    success: function(data) { 
+      let token = data.access_token;
+      playerSetup(token);
+    }
+  });
+}
+
+window.onSpotifyWebPlaybackSDKReady = () => {
+  //getToken();
+}
+
+function playerSetup(token) {
+  console.log('playerSetup token:', token);
+  const player = new Spotify.Player({
+    name: 'Web Playback SDK Quick Start Player',
+    getOAuthToken: cb => { cb(token); }
+  });
+
+  // Error handling
+  player.addListener('initialization_error', ({ message }) => { console.error(message); });
+  player.addListener('authentication_error', ({ message }) => { console.error(message); });
+  player.addListener('account_error', ({ message }) => { console.error(message); });
+  player.addListener('playback_error', ({ message }) => { console.error(message); });
+
+  // Playback status updates
+  player.addListener('player_state_changed', state => { console.log(state); });
+
+  // Ready
+  player.addListener('ready', ({ device_id }) => {
+    console.log('Ready with Device ID', device_id);
+    devid = device_id;
+  });
+
+  // Not Ready
+  player.addListener('not_ready', ({ device_id }) => {
+    console.log('Device ID has gone offline', device_id);
+  });
+
+  // Connect to the player!
+  player.connect();
+};
+
+function play() {
+ $.ajax({
+   url: "https://api.spotify.com/v1/me/player/play?device_id=" + devid,
+   type: "PUT",
+   data: '{"context_uri": "spotify:playlist:3XsTiSIOLCVKT47fmHU6BL"}',
+   beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + token );},
+   success: function(data) { 
+     console.log(data)
+   }
+  });
+}
+
+/*
+function play() {
+  elem = document.getElementById('player');
+  //elem.src = '../audio/paul.mp3';
+  elem.play()
+}
+*/
+</script>
+
+<a href="javascript:void(0);" onclick="play()">Play</a>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0ArlUSVDQIw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

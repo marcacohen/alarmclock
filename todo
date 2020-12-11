@@ -1,16 +1,11 @@
-- enlarge digits
-- move controls to bottom
+X enlarge digits
+X move controls to bottom
+- add background color selection
+- add spotify steaming
 - add easy brightness control
 - add auto-start on rpy
 - add auto-watch github for new version
 - add calendar widget
-- add spotify steaming
-- add default image
-- remember last image
-- add default audio
-- remember last audio
 - make up/down controls more mnemonic
-- try some experiments with colored backgrounds for enhanced readability
-- auto-stretch image to fit screen width 
 - consider quote of the day
 - consider weather report
