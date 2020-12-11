@@ -358,9 +358,10 @@ interface Window
 
 class Main {
 	constructor() {
+		this.count = 0;
+
 		// Creae the clock
 		this.clock = new Clock();
-        
         // and the alarm clock, disabling alarm mode
 		this.alarm = new Clock();
 		this.alarm.time24.hours = 0;
@@ -393,7 +394,7 @@ class Main {
 
         this.alarmSleepActivated = false;
         $(".alarm-snooze").click(this.alarmSleep.bind(this));
-		
+
 		// Update clock to current time and begin ticking every second
 		this.updateClock();
 		setInterval(this.updateClock.bind(this), 1000);
@@ -401,6 +402,9 @@ class Main {
 
 	// Gets called every second
 	updateClock() {
+		if (++this.count > 2) {
+			$('.strip').css('transition', 'all 1s linear')
+		}
 		if (!this.alarmMode)
 		{
 			this.clock.currentTime();
@@ -693,6 +697,7 @@ class Main {
         }
 	}
 	
+	count: number;
 	clock: Clock;
 	alarm: Clock;
 	_alarmMode: boolean;
@@ -705,6 +710,7 @@ class Main {
 
 $(function()
 {
+	$('.clock').removeClass('hidden');
 	var main = new Main();
 	window.main = main;
 });
