@@ -6,8 +6,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css'>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'><link rel="stylesheet" href="./style.css">
+  <script>
+    function auto_refresh(t) {
+      setTimeout("location.reload(true);", t);
+    }
+  </script>
 </head>
-<body>
+<body onload = "JavaScript:auto_refresh(300000);">
 <input type="color">
 <input type="file" id="alarmTone" />
 <audio id="player" loop></audio>
