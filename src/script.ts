@@ -10,7 +10,7 @@ declare var $: any;
  * importing it to and from 12/hour format
 */
 
-// Required interfce for 12 hour import/export format
+// Required interface for 12 hour import/export format
 interface Time12
 {
 	hours: number;
@@ -119,7 +119,7 @@ class Spinner
 			+ " .slot-" + this.groupEntryId 
 			+ " .strip").removeClass(Spinner.notchesCSS);
         
-        $("." + this.groupName 
+        	$("." + this.groupName 
 			+ " .slot-" + this.groupEntryId 
 			+ " .strip").addClass("pos-" + this.notchId);
 	}
@@ -398,7 +398,7 @@ class Main {
 		this.updateClock();
 		setInterval(this.updateClock.bind(this), 1000);
 	}
-	
+
 	// Gets called every second
 	updateClock() {
 		if (!this.alarmMode)
