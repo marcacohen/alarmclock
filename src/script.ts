@@ -360,10 +360,10 @@ class Main {
 	constructor() {
 		this.count = 0;
 		let color = localStorage.getItem('bgcolor');
-		console.log('color:', color);
 		if (!color) {
 			color = '#2e5090';
 		}
+
 
 		// Creae the clock
 		this.clock = new Clock();
@@ -372,6 +372,11 @@ class Main {
 		this.alarm.time24.hours = 0;
 		this.alarm.time24.minutes = 0;
         this.alarmMode = false;
+
+		let hr24Mode = localStorage.getItem('hr24Mode') == 'true';
+		if (hr24Mode != this.clock.hr24Mode) {
+			this.toggle24hrMode();
+		}
 
         // Enable Alarm features
         this.enableAlarmFeatures();
@@ -506,6 +511,7 @@ class Main {
 		// Best to toggle both to skip confusion
 		this.alarm.hr24Mode = this.clock.hr24Mode = !this.clock.hr24Mode;
 		this.alarmMode = this.alarmMode;
+		localStorage.setItem('hr24Mode', this.clock.hr24Mode.toString());
 	}
 
 	incrementAlarmHours()
