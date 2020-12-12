@@ -359,6 +359,11 @@ interface Window
 class Main {
 	constructor() {
 		this.count = 0;
+		let color = localStorage.getItem('bgcolor');
+		console.log('color:', color);
+		if (!color) {
+			color = '#2e5090';
+		}
 
 		// Creae the clock
 		this.clock = new Clock();
@@ -377,7 +382,8 @@ class Main {
 
 	$(".alarm-bgcolor").click(this.setAlarmColor.bind(this));
 	this.bgcolor = document.querySelector("#alarm-bgcolor");
-	this.bgcolor.value = '#2e5090';
+	this.bgcolor.value = color;
+	$(document.body).css('background-color', color);
   	this.bgcolor.addEventListener("input", this.updateColor, false);
 	this.bgcolor.select();
 
@@ -407,7 +413,9 @@ class Main {
 	}
 
 	updateColor(ev) {
-		$(document.body).css('background-color', ev.target.value);
+		let color = ev.target.value;
+		$(document.body).css('background-color', color);
+		localStorage.setItem('bgcolor', color);
 	}
 
 	// Gets called every second
