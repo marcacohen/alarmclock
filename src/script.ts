@@ -364,6 +364,13 @@ class Main {
 			color = '#2e5090';
 		}
 
+		let audio = localStorage.getItem('audio');
+		if (audio) {
+			this.fileReader = new FileReader();
+			this.fileReaderDone = true;
+			$("#player")[0].src = audio;
+			$(".alarm-melody").addClass("toggled");
+		}
 
 		// Creae the clock
 		this.clock = new Clock();
@@ -621,6 +628,7 @@ class Main {
 			this.fileReader.readAsDataURL($('#alarmTone')[0].files[0]);
 
 			this.fileReader.onloadend = function() {
+				localStorage.setItem('audio', this.fileReader.result);
 				$("#player")[0].src = this.fileReader.result;
 				this.fileReaderDone = true;
 				$(".alarm-melody").addClass("toggled");
