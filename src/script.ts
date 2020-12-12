@@ -375,6 +375,12 @@ class Main {
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
         $(".alarm-24hr").click(this.toggle24hrMode.bind(this));
 
+	$(".alarm-bgcolor").click(this.setAlarmColor.bind(this));
+	this.bgcolor = document.querySelector("#alarm-bgcolor");
+	this.bgcolor.value = '#2e5090';
+  	this.bgcolor.addEventListener("input", this.updateColor, false);
+	this.bgcolor.select();
+
         $(".hours .up").click(this.incrementAlarmHours.bind(this));
         $(".hours .down").click(this.decrementAlarmHours.bind(this));
 
@@ -398,6 +404,10 @@ class Main {
 		// Update clock to current time and begin ticking every second
 		this.updateClock();
 		setInterval(this.updateClock.bind(this), 1000);
+	}
+
+	updateColor(ev) {
+		$(document.body).css('background-color', ev.target.value);
 	}
 
 	// Gets called every second
@@ -477,6 +487,10 @@ class Main {
 	toggleAlarmMode()
 	{
 		this.alarmMode = !this.alarmMode;
+	}
+
+	setAlarmColor() {
+		this.bgcolor.click();
 	}
 
 	toggle24hrMode()
@@ -698,6 +712,7 @@ class Main {
 	}
 	
 	count: number;
+	bgcolor: any;
 	clock: Clock;
 	alarm: Clock;
 	_alarmMode: boolean;

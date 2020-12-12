@@ -1,11 +1,20 @@
 X enlarge digits
 X move controls to bottom
 X add auto-watch github for new version
-- add background color selection
-- add spotify steaming
-- add easy brightness control
+X fix startup glitch (animation, which is distracting when page reloads)
+X add background color selection
+- wire up speaker
+- add random play function
+- make settings persistent (audio, alarm, color, clock mode, etc.)
 - add auto-start on rpy
+- sleep timer
+- add easy brightness control
+- add daily random background color 
+- reposition color picker dialog near button
+
+future
+- interval timer for Gosia (sep project?)
+- make up/down controls more intuitive
 - add calendar widget
-- make up/down controls more mnemonic
 - consider quote of the day
 - consider weather report
