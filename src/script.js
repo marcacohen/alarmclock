@@ -287,9 +287,21 @@ var Main = /** @class */ (function () {
         // and the alarm clock, disabling alarm mode
         this.alarm = new Clock();
         this.alarm.isAlarm = true;
-        this.alarm.time24.hours = parseInt(localStorage.getItem('mclock.hours'));
-        this.alarm.time24.minutes = parseInt(localStorage.getItem('mclock.minutes'));
-        this.alarm.time24.to12().pm = (localStorage.getItem('mclock.pm') == 'true');
+        var hours = localStorage.getItem('mclock.hours');
+        this.alarm.time24.hours = 0;
+        this.alarm.time24.minutes = 0;
+        this.alarm.time24.to12().pm = false;
+        if (hours != null && hours != 'NaN') {
+            this.alarm.time24.hours = parseInt(hours);
+        }
+        var minutes = localStorage.getItem('mclock.minutes');
+        if (minutes != null && minutes != 'NaN') {
+            this.alarm.time24.minutes = parseInt(minutes);
+        }
+        var pm = localStorage.getItem('mclock.pm');
+        if (pm != null && pm != 'NaN') {
+            this.alarm.time24.to12().pm = (pm == 'true');
+        }
         this.alarmMode = false;
         var hr24Mode = localStorage.getItem('mclock.hr24Mode') == 'true';
         if (hr24Mode != this.clock.hr24Mode) {
