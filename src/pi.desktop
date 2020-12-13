@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
 Name=mclock
-Exec=/usr/bin/chromium-browser --kiosk /home/pi/p/alarmclock/src/index.html
+Exec=/usr/bin/chromium-browser --start-fullscreen /home/pi/p/alarmclock/src/index.html
 X-GNOME-Autostart-enabled=true
