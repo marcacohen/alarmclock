@@ -121,6 +121,7 @@ body {
 }
 .viewport .buttons .row button {
   width: 100%;
+  height: 100%;
   margin: 10px;
   background-color: #ccc;
   opacity: 0.5;
@@ -241,7 +242,7 @@ body {
   background-color: transparent;
   width: 100%;
   margin: 0 5px;
-  font-size: 250px;
+  font-size: 225px;
   overflow: hidden;
 }
 .viewport .digits .hours .slot .strip,
@@ -344,31 +345,31 @@ body {
   top: 0px;
 }
 .strip.pos-1 {
-  top: -287px;
+  top: -260px;
 }
 .strip.pos-2 {
-  top: -574px;
+  top: -520px;
 }
 .strip.pos-3 {
-  top: -861px;
+  top: -780px;
 }
 .strip.pos-4 {
-  top: -1148px;
+  top: -1040px;
 }
 .strip.pos-5 {
-  top: -1435px;
+  top: -1300px;
 }
 .strip.pos-6 {
-  top: -1722px;
+  top: -1560px;
 }
 .strip.pos-7 {
-  top: -2009px;
+  top: -1820px;
 }
 .strip.pos-8 {
-  top: -2296px;
+  top: -2080px;
 }
 .strip.pos-9 {
-  top: -2583px;
+  top: -2340px;
 }
 #alarmTone,
 #player {
