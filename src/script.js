@@ -279,7 +279,7 @@ var Main = /** @class */ (function () {
             this.fileReader = new FileReader();
             this.fileReaderDone = true;
             $("#player")[0].src = audio;
-            $("#player")[0].volume = .2;
+            $("#player")[0].volume = .1;
             $(".alarm-melody").addClass("toggled");
         }
         // Creae the clock
