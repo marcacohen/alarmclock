@@ -56,7 +56,7 @@ body {
   -webkit-background-size: contain;
   -moz-background-size: contain;
   background-size: contain;
-  font-family: 'Courier New', 'Droid Sans Mono';
+  font-family: 'Droid Serif', 'Courier New', 'Droid Sans Mono';
   font-size: 20px;
 }
 .viewport {
