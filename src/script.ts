@@ -427,6 +427,8 @@ class Main {
         $(".alarm-enable").click(this.alarmEnable.bind(this));
 
         this.alarmSleepActivated = false;
+        this.countdownTimerActivated = false;
+        this.SleepTimerActivated = false;
         $(".alarm-snooze").click(this.alarmSleep.bind(this));
 
 		// Update clock to current time and begin ticking every second
@@ -753,6 +755,8 @@ class Main {
 	alarmPlaying: boolean;
 	alarmEnabled: boolean;
 	alarmSleepActivated: boolean;
+	countdownTimerActivated: boolean;
+	sleepTimerActivated: boolean;
 }
 
 $(function()
