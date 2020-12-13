@@ -366,6 +366,7 @@ interface Window
 
 class Main {
 	constructor() {
+		document.body.style.cursor = 'none';
 		this.count = 0;
 		let color = localStorage.getItem('mclock.bgcolor');
 		if (!color) {
