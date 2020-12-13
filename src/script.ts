@@ -385,9 +385,9 @@ class Main {
         	// and the alarm clock, disabling alarm mode
 		this.alarm = new Clock();
 		this.alarm.isAlarm = true;
-		this.alarm.time24.hours = localStorage.getItem('mclock.hours');
-		this.alarm.time24.minutes = localStorage.getItem('mclock.minutes');
-		this.alarm.time24.to12().pm = localStorage.getItem('mclock.pm');
+		this.alarm.time24.hours = parseInt(localStorage.getItem('mclock.hours'));
+		this.alarm.time24.minutes = parseInt(localStorage.getItem('mclock.minutes'));
+		this.alarm.time24.to12().pm = (localStorage.getItem('mclock.pm') == 'true');
         	this.alarmMode = false;
 
 		let hr24Mode = localStorage.getItem('mclock.hr24Mode') == 'true';
@@ -428,7 +428,7 @@ class Main {
 
         this.alarmSleepActivated = false;
         this.countdownTimerActivated = false;
-        this.SleepTimerActivated = false;
+        this.sleepTimerActivated = false;
         $(".alarm-snooze").click(this.alarmSleep.bind(this));
 
 		// Update clock to current time and begin ticking every second
