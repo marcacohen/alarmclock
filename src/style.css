@@ -242,7 +242,7 @@ body {
   background-color: transparent;
   width: 100%;
   margin: 0 5px;
-  font-size: 210px;
+  font-size: 200px;
   overflow: hidden;
 }
 .viewport .digits .hours .slot .strip,
@@ -345,31 +345,31 @@ body {
   top: 0px;
 }
 .strip.pos-1 {
-  top: -241px;
+  top: -231px;
 }
 .strip.pos-2 {
-  top: -482px;
+  top: -462px;
 }
 .strip.pos-3 {
-  top: -723px;
+  top: -693px;
 }
 .strip.pos-4 {
-  top: -964px;
+  top: -924px;
 }
 .strip.pos-5 {
-  top: -1205px;
+  top: -1155px;
 }
 .strip.pos-6 {
-  top: -1446px;
+  top: -1386px;
 }
 .strip.pos-7 {
-  top: -1687px;
+  top: -1617px;
 }
 .strip.pos-8 {
-  top: -1928px;
+  top: -1848px;
 }
 .strip.pos-9 {
-  top: -2169px;
+  top: -2079px;
 }
 #alarmTone,
 #player {
