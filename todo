@@ -4,9 +4,10 @@ X add auto-watch github for new version
 X fix startup glitch (animation, which is distracting when page reloads)
 X add background color selection
 X make settings persistent (audio, alarm time, color, 24 hour mode, etc.)
+X add auto-start on rpy
+X wire up speaker
+- fine tune display
 - bug: snooze updates alarm setting
-- wire up speaker
-- add auto-start on rpy
 - sleep timer
 - add easy brightness control
 - add daily random background color 
