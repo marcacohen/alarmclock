@@ -264,6 +264,8 @@ class Clock
 	// Create
 	constructor()
 	{
+		this.isAlarm = false;
+
 		// Create proper interfaces to the dials
 		this.hours = new SpinnerGroupDigits("hours", 1, 1, 12);
 		this.minutes = new SpinnerGroupDigits("minutes", 1, 0, 59);
@@ -315,6 +317,11 @@ class Clock
 			else
 				this.amPm.notchId = 0;
 		}
+		if (this.isAlarm ) {
+			localStorage.setItem('mclock.hours', this.time24.hours.toString());
+			localStorage.setItem('mclock.minutes', this.time24.minutes.toString());
+			localStorage.setItem('mclock.pm', this.time24.to12().pm.toString());
+		}
 	}
 	
 	// When changing 24-hour mode, the hours dial must be updated
@@ -344,6 +351,7 @@ class Clock
 	amPm: Spinner;
 	_hr24Mode: boolean;
 	time24: Time;
+	isAlarm: boolean;
 }
 
 /*
@@ -359,12 +367,12 @@ interface Window
 class Main {
 	constructor() {
 		this.count = 0;
-		let color = localStorage.getItem('bgcolor');
+		let color = localStorage.getItem('mclock.bgcolor');
 		if (!color) {
 			color = '#2e5090';
 		}
 
-		let audio = localStorage.getItem('audio');
+		let audio = localStorage.getItem('mclock.audio');
 		if (audio) {
 			this.fileReader = new FileReader();
 			this.fileReaderDone = true;
@@ -374,13 +382,15 @@ class Main {
 
 		// Creae the clock
 		this.clock = new Clock();
-        // and the alarm clock, disabling alarm mode
+        	// and the alarm clock, disabling alarm mode
 		this.alarm = new Clock();
-		this.alarm.time24.hours = 0;
-		this.alarm.time24.minutes = 0;
-        this.alarmMode = false;
+		this.alarm.isAlarm = true;
+		this.alarm.time24.hours = localStorage.getItem('mclock.hours');
+		this.alarm.time24.minutes = localStorage.getItem('mclock.minutes');
+		this.alarm.time24.to12().pm = localStorage.getItem('mclock.pm');
+        	this.alarmMode = false;
 
-		let hr24Mode = localStorage.getItem('hr24Mode') == 'true';
+		let hr24Mode = localStorage.getItem('mclock.hr24Mode') == 'true';
 		if (hr24Mode != this.clock.hr24Mode) {
 			this.toggle24hrMode();
 		}
@@ -427,7 +437,7 @@ class Main {
 	updateColor(ev) {
 		let color = ev.target.value;
 		$(document.body).css('background-color', color);
-		localStorage.setItem('bgcolor', color);
+		localStorage.setItem('mclock.bgcolor', color);
 	}
 
 	// Gets called every second
@@ -518,7 +528,7 @@ class Main {
 		// Best to toggle both to skip confusion
 		this.alarm.hr24Mode = this.clock.hr24Mode = !this.clock.hr24Mode;
 		this.alarmMode = this.alarmMode;
-		localStorage.setItem('hr24Mode', this.clock.hr24Mode.toString());
+		localStorage.setItem('mclock.hr24Mode', this.clock.hr24Mode.toString());
 	}
 
 	incrementAlarmHours()
@@ -628,7 +638,7 @@ class Main {
 			this.fileReader.readAsDataURL($('#alarmTone')[0].files[0]);
 
 			this.fileReader.onloadend = function() {
-				localStorage.setItem('audio', this.fileReader.result);
+				localStorage.setItem('mclock.audio', this.fileReader.result);
 				$("#player")[0].src = this.fileReader.result;
 				this.fileReaderDone = true;
 				$(".alarm-melody").addClass("toggled");
