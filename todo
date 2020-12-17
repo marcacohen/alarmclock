@@ -9,13 +9,13 @@ X wire up speaker
 X fine tune display
 X add easy brightness control
 - sleep timer
+- interval timer
 - bug: snooze updates alarm setting
+
+future
 - add daily random background color 
 - add random play function
 - reposition color picker dialog near button
-
-future
-- interval timer for Gosia (sep project?)
 - make up/down controls more intuitive
 - add calendar widget
 - consider quote of the day
