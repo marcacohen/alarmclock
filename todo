@@ -6,10 +6,10 @@ X add background color selection
 X make settings persistent (audio, alarm time, color, 24 hour mode, etc.)
 X add auto-start on rpy
 X wire up speaker
-- fine tune display
-- bug: snooze updates alarm setting
+X fine tune display
+X add easy brightness control
 - sleep timer
-- add easy brightness control
+- bug: snooze updates alarm setting
 - add daily random background color 
 - add random play function
 - reposition color picker dialog near button
