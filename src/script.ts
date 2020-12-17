@@ -368,6 +368,11 @@ class Main {
 	constructor() {
 		document.body.style.cursor = 'none';
 		this.count = 0;
+
+		let brightness = localStorage.getItem('mclock.brightness');
+		if (!brightness) {
+			brightness = '1';
+		}
 		let color = localStorage.getItem('mclock.bgcolor');
 		if (!color) {
 			color = '#2e5090';
@@ -413,6 +418,13 @@ class Main {
         this.enableAlarmFeatures();
 
         // Wireup some event handlers
+	$(".brightness").click(this.setBrightness.bind(this));
+	this.brightness = document.querySelector("#brightness");
+	this.brightness.value = brightness;
+	$(document).css('filter', 'brightness: ' + brightness);
+  	this.brightness.addEventListener("input", this.updateBrightness, false);
+	this.brightness.select();
+
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
         $(".alarm-24hr").click(this.toggle24hrMode.bind(this));
 
@@ -454,6 +466,12 @@ class Main {
 		let color = ev.target.value;
 		$(document.body).css('background-color', color);
 		localStorage.setItem('mclock.bgcolor', color);
+	}
+
+	updateBrightness(ev) {
+		let brightness = ev.target.value;
+		$(document.documentElement).css('filter', 'brightness(' + brightness + ')');
+		localStorage.setItem('mclock.brightness', brightness);
 	}
 
 	// Gets called every second
@@ -533,6 +551,14 @@ class Main {
 	toggleAlarmMode()
 	{
 		this.alarmMode = !this.alarmMode;
+	}
+
+	setBrightness() {
+		if (this.brightness.style.display == 'none') {
+			this.brightness.style.display = 'inline';
+		} else {
+			this.brightness.style.display = 'none';
+		};
 	}
 
 	setAlarmColor() {
@@ -761,6 +787,7 @@ class Main {
 	
 	count: number;
 	bgcolor: any;
+	brightness: any;
 	clock: Clock;
 	alarm: Clock;
 	_alarmMode: boolean;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Audio Alarm Clock</title>
@@ -87,6 +87,7 @@
     </div>
     <div class="buttons">
         <div class="row">
+            <button disabled title="Set Screen Brightness" class="brightness"><i class="fas fa-sun"></i><input id="brightness" name="brightness" style="display: none" type="range" value="1" min=".2" max="2" step=".05"></button>
             <button disabled title="Set the alarm" class="alarm-set"><i class="fas fa-cog"></i></button>
             <button disabled title="Background Color" class="alarm-bgcolor"><i class="fas fa-brush"></i><input id="alarm-bgcolor" name="alarm-bgcolor" style="display: none" value="#2e5090" type="color"></button>
             <button disabled title="Select a melody file" class="alarm-melody"><i class="fas fa-upload"></i></button>

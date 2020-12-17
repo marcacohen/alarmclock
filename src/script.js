@@ -269,7 +269,12 @@ var Clock = /** @class */ (function () {
 }());
 var Main = /** @class */ (function () {
     function Main() {
+        document.body.style.cursor = 'none';
         this.count = 0;
+        var brightness = localStorage.getItem('mclock.brightness');
+        if (!brightness) {
+            brightness = '1';
+        }
         var color = localStorage.getItem('mclock.bgcolor');
         if (!color) {
             color = '#2e5090';
@@ -310,6 +315,12 @@ var Main = /** @class */ (function () {
         // Enable Alarm features
         this.enableAlarmFeatures();
         // Wireup some event handlers
+        $(".brightness").click(this.setBrightness.bind(this));
+        this.brightness = document.querySelector("#brightness");
+        this.brightness.value = brightness;
+        $(document).css('filter', 'brightness: ' + brightness);
+        this.brightness.addEventListener("input", this.updateBrightness, false);
+        this.brightness.select();
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
         $(".alarm-24hr").click(this.toggle24hrMode.bind(this));
         $(".alarm-bgcolor").click(this.setAlarmColor.bind(this));
@@ -341,6 +352,11 @@ var Main = /** @class */ (function () {
         var color = ev.target.value;
         $(document.body).css('background-color', color);
         localStorage.setItem('mclock.bgcolor', color);
+    };
+    Main.prototype.updateBrightness = function (ev) {
+        var brightness = ev.target.value;
+        $(document.documentElement).css('filter', 'brightness(' + brightness + ')');
+        localStorage.setItem('mclock.brightness', brightness);
     };
     // Gets called every second
     Main.prototype.updateClock = function () {
@@ -409,6 +425,15 @@ var Main = /** @class */ (function () {
     });
     Main.prototype.toggleAlarmMode = function () {
         this.alarmMode = !this.alarmMode;
+    };
+    Main.prototype.setBrightness = function () {
+        if (this.brightness.style.display == 'none') {
+            this.brightness.style.display = 'inline';
+        }
+        else {
+            this.brightness.style.display = 'none';
+        }
+        ;
     };
     Main.prototype.setAlarmColor = function () {
         this.bgcolor.click();
