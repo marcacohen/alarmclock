@@ -265,6 +265,7 @@ class Clock
 	constructor()
 	{
 		this.isAlarm = false;
+		this.isTimer = false;
 
 		// Create proper interfaces to the dials
 		this.hours = new SpinnerGroupDigits("hours", 1, 1, 12);
@@ -352,6 +353,7 @@ class Clock
 	_hr24Mode: boolean;
 	time24: Time;
 	isAlarm: boolean;
+	isTimer: boolean;
 }
 
 /*
@@ -392,6 +394,13 @@ class Main {
         	// and the alarm clock, disabling alarm mode
 		this.alarm = new Clock();
 		this.alarm.isAlarm = true;
+		// and the timer clock
+		this.timer = new Clock();
+		this.timer.isTimer = true;
+		this.timer.time24.hours = 0;
+		this.timer.time24.minutes = 0;
+		this.timer.time24.to12().pm = false;
+
 		let hours = localStorage.getItem('mclock.hours')
 		this.alarm.time24.hours = 0;
 		this.alarm.time24.minutes = 0;
@@ -790,6 +799,7 @@ class Main {
 	brightness: any;
 	clock: Clock;
 	alarm: Clock;
+	timer: Clock;
 	_alarmMode: boolean;
 	fileReader: FileReader;
 	fileReaderDone: boolean;
