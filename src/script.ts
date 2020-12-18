@@ -435,6 +435,7 @@ class Main {
 	this.brightness.select();
 
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
+        $(".timer-set").click(this.toggleTimerMode.bind(this));
         $(".alarm-24hr").click(this.toggle24hrMode.bind(this));
 
 	$(".alarm-bgcolor").click(this.setAlarmColor.bind(this));
@@ -460,6 +461,8 @@ class Main {
 
         this.alarmEnabled = false;
         $(".alarm-enable").click(this.alarmEnable.bind(this));
+        this.timerEnabled = false;
+        $(".timer-enable").click(this.timerEnable.bind(this));
 
         this.alarmSleepActivated = false;
         this.countdownTimerActivated = false;
@@ -557,9 +560,21 @@ class Main {
 		}
 	}
 
+	get timerMode() {
+		return this._timerMode;
+	}
+
+	set timerMode(value: boolean) {
+	}
+
 	toggleAlarmMode()
 	{
 		this.alarmMode = !this.alarmMode;
+	}
+
+	toggleTimerMode()
+	{
+		this.timerMode = !this.timerMode;
 	}
 
 	setBrightness() {
@@ -726,6 +741,9 @@ class Main {
 		}
 	}
 
+	timerEnable() {
+	}
+
 	alarmEnable()
 	{
 		this.alarmEnabled = !this.alarmEnabled;
@@ -801,10 +819,12 @@ class Main {
 	alarm: Clock;
 	timer: Clock;
 	_alarmMode: boolean;
+	_timerMode: boolean;
 	fileReader: FileReader;
 	fileReaderDone: boolean;
 	alarmPlaying: boolean;
 	alarmEnabled: boolean;
+	timerEnabled: boolean;
 	alarmSleepActivated: boolean;
 	countdownTimerActivated: boolean;
 	sleepTimerActivated: boolean;

@@ -329,6 +329,7 @@ var Main = /** @class */ (function () {
         this.brightness.addEventListener("input", this.updateBrightness, false);
         this.brightness.select();
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
+        $(".timer-set").click(this.toggleTimerMode.bind(this));
         $(".alarm-24hr").click(this.toggle24hrMode.bind(this));
         $(".alarm-bgcolor").click(this.setAlarmColor.bind(this));
         this.bgcolor = document.querySelector("#alarm-bgcolor");
@@ -347,6 +348,8 @@ var Main = /** @class */ (function () {
         $(".alarm-melody-play").click(this.soundAlarm.bind(this));
         this.alarmEnabled = false;
         $(".alarm-enable").click(this.alarmEnable.bind(this));
+        this.timerEnabled = false;
+        $(".timer-enable").click(this.timerEnable.bind(this));
         this.alarmSleepActivated = false;
         this.countdownTimerActivated = false;
         this.sleepTimerActivated = false;
@@ -430,8 +433,20 @@ var Main = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Main.prototype, "timerMode", {
+        get: function () {
+            return this._timerMode;
+        },
+        set: function (value) {
+        },
+        enumerable: false,
+        configurable: true
+    });
     Main.prototype.toggleAlarmMode = function () {
         this.alarmMode = !this.alarmMode;
+    };
+    Main.prototype.toggleTimerMode = function () {
+        this.timerMode = !this.timerMode;
     };
     Main.prototype.setBrightness = function () {
         if (this.brightness.style.display == 'none') {
@@ -561,6 +576,8 @@ var Main = /** @class */ (function () {
                 this.alarmSleepActivated = false;
             }
         }
+    };
+    Main.prototype.timerEnable = function () {
     };
     Main.prototype.alarmEnable = function () {
         this.alarmEnabled = !this.alarmEnabled;

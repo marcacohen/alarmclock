@@ -85,13 +85,20 @@
             </div>
         </div>
     </div>
+	    <div>
+              <input type="checkbox" class="alarm-enable" name="" value="0">
+              <label style="font-weight: bold; font-size: 28px" for="alarm-enable">&thinsp;Alarm</label>
+		&nbsp;&nbsp;
+              <input type="checkbox" class="timer-enable" name="" value="0">
+              <label style="font-weight: bold; font-size: 28px" for="timer-enable">&thinsp;Timer</label>
+	    </div>
     <div class="buttons">
         <div class="row">
             <button disabled title="Set Screen Brightness" class="brightness"><input id="brightness" name="brightness" style="display: none" type="range" value=".5" min="0" max="1" step=".05"><i class="fas fa-sun"></i></button>
-            <button disabled title="Set the alarm" class="alarm-set"><i class="fas fa-cog"></i></button>
+            <button disabled title="Set the alarm" class="alarm-set"><i class="fas fa-bell"></i></button>
+            <button disabled title="Set the timer" class="timer-set"><i class="fas fa-stopwatch"></i></button>
             <button disabled title="Background Color" class="alarm-bgcolor"><i class="fas fa-brush"></i><input id="alarm-bgcolor" name="alarm-bgcolor" style="display: none" value="#2e5090" type="color"></button>
             <button disabled title="Select a melody file" class="alarm-melody"><i class="fas fa-upload"></i></button>
-            <button disabled title="Enable/Disable Alarm" class="alarm-enable"><i class="fas fa-stopwatch"></i></button>
             <button title="Enable/Disable 24/hr mode" class="alarm-24hr"><i class="far fa-clock"></i></button>
             <button disabled title="Manually start/stop alarm" class="alarm-melody-play"><span class="fa fa-play"></span></button>
             <button disabled title="Snooze for 5 minutes" class="alarm-snooze"><span class="fa fa-bed"></span></button>
