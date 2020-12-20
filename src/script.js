@@ -217,8 +217,6 @@ var Clock = /** @class */ (function () {
     function Clock() {
         this.isAlarm = false;
         this.isTimer = false;
-        this.isInterval = false;
-        this.isSleep = false;
         // Create proper interfaces to the dials
         this.hours = new SpinnerGroupDigits("hours", 1, 1, 12);
         this.minutes = new SpinnerGroupDigits("minutes", 1, 0, 59);
@@ -630,14 +628,6 @@ var Main = /** @class */ (function () {
             this.alarm.time24 = Time.from12(time12);
             this.alarm.updateTime();
         }
-    };
-    Main.prototype.timerToSleep = function () {
-        this.timer.isSleep = true;
-        this.timer.isInterval = false;
-    };
-    Main.prototype.timerToInterval = function () {
-        this.timer.isInterval = true;
-        this.timer.isSleep = false;
     };
     Main.prototype.loadAlarmMelodyFile = function () {
         $("#alarmTone").click();

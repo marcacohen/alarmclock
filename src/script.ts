@@ -273,8 +273,6 @@ class Clock
 	{
 		this.isAlarm = false;
 		this.isTimer = false;
-		this.isInterval = false;
-		this.isSleep = false;
 
 		// Create proper interfaces to the dials
 		this.hours = new SpinnerGroupDigits("hours", 1, 1, 12);
@@ -363,8 +361,6 @@ class Clock
 	time24: Time;
 	isAlarm: boolean;
 	isTimer: boolean;
-	isInterval: boolean;
-	isSleep: boolean;
 }
 
 /*
@@ -756,16 +752,6 @@ class Main {
 			this.alarm.time24 = Time.from12(time12);
 			this.alarm.updateTime();
 		}
-	}
-
-	timerToSleep() {
-		this.timer.isSleep = true;
-		this.timer.isInterval = false;
-	}
-
-	timerToInterval() {
-		this.timer.isInterval = true;
-		this.timer.isSleep = false;
 	}
 
 	loadAlarmMelodyFile()
