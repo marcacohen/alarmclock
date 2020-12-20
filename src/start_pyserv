@@ -1,5 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=pyserv
-Exec=/usr/bin/python /home/pi/p/alarmclock/src/pyserv.py
-X-GNOME-Autostart-enabled=true
