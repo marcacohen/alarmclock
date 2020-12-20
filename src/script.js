@@ -288,7 +288,7 @@ var Main = /** @class */ (function () {
         this.count = 0;
         var brightness = localStorage.getItem('mclock.brightness');
         if (!brightness) {
-            brightness = '1';
+            brightness = '127';
         }
         var color = localStorage.getItem('mclock.bgcolor');
         if (!color) {
@@ -336,11 +336,11 @@ var Main = /** @class */ (function () {
         // Enable Alarm features
         this.enableAlarmFeatures();
         // Wireup some event handlers
-        $(".brightness").click(this.setBrightness.bind(this));
+        $(".brightness").click(this.enableBrightness.bind(this));
         this.brightness = document.querySelector("#brightness");
         this.brightness.value = brightness;
-        $(document).css('filter', 'brightness: ' + brightness);
-        this.brightness.addEventListener("input", this.updateBrightness, false);
+        this.setBrightness(brightness);
+        this.brightness.addEventListener("input", this.updateBrightness.bind(this), false);
         this.brightness.select();
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
         $(".timer-set").click(this.toggleTimerMode.bind(this));
@@ -377,13 +377,15 @@ var Main = /** @class */ (function () {
         $(document.body).css('background-color', color);
         localStorage.setItem('mclock.bgcolor', color);
     };
-    Main.prototype.updateBrightness = function (ev) {
-        var brightness = ev.target.value;
-        //$(document.documentElement).css('filter', 'brightness(' + brightness + ')');
+    Main.prototype.setBrightness = function (brightness) {
+        localStorage.setItem('mclock.brightness', brightness);
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open("GET", '127.0.0.1:5000/' + '?b=' + brightness, false);
-        xmlHttp.send(null);
-        localStorage.setItem('mclock.brightness', brightness);
+        //xmlHttp.send(null);
+    };
+    Main.prototype.updateBrightness = function (ev) {
+        var brightness = ev.target.value;
+        this.setBrightness(brightness);
     };
     // Gets called every second
     Main.prototype.updateClock = function () {
@@ -487,7 +489,7 @@ var Main = /** @class */ (function () {
     Main.prototype.toggleTimerMode = function () {
         this.timerMode = !this.timerMode;
     };
-    Main.prototype.setBrightness = function () {
+    Main.prototype.enableBrightness = function () {
         if (this.brightness.style.display == 'none') {
             this.brightness.style.display = 'inline';
         }

@@ -380,7 +380,7 @@ class Main {
 
 		let brightness = localStorage.getItem('mclock.brightness');
 		if (!brightness) {
-			brightness = '1';
+			brightness = '127';
 		}
 		let color = localStorage.getItem('mclock.bgcolor');
 		if (!color) {
@@ -434,11 +434,11 @@ class Main {
         this.enableAlarmFeatures();
 
         // Wireup some event handlers
-	$(".brightness").click(this.setBrightness.bind(this));
+	$(".brightness").click(this.enableBrightness.bind(this));
 	this.brightness = document.querySelector("#brightness");
 	this.brightness.value = brightness;
-	$(document).css('filter', 'brightness: ' + brightness);
-  	this.brightness.addEventListener("input", this.updateBrightness, false);
+	this.setBrightness(brightness);
+  	this.brightness.addEventListener("input", this.updateBrightness.bind(this), false);
 	this.brightness.select();
 
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
@@ -487,13 +487,16 @@ class Main {
 		localStorage.setItem('mclock.bgcolor', color);
 	}
 
+	setBrightness(brightness) {
+		localStorage.setItem('mclock.brightness', brightness);
+		var xmlHttp = new XMLHttpRequest();
+    		xmlHttp.open("GET", '127.0.0.1:5000/' + '?b=' + brightness, false); 
+    		//xmlHttp.send(null);
+	}
+
 	updateBrightness(ev) {
 		let brightness = ev.target.value;
-		//$(document.documentElement).css('filter', 'brightness(' + brightness + ')');
-		var xmlHttp = new XMLHttpRequest();
-    		xmlHttp.open( "GET", '127.0.0.1:5000/' + '?b=' + brightness, false ); 
-    		xmlHttp.send( null );
-		localStorage.setItem('mclock.brightness', brightness);
+		this.setBrightness(brightness);
 	}
 
 	// Gets called every second
@@ -609,7 +612,7 @@ class Main {
 		this.timerMode = !this.timerMode;
 	}
 
-	setBrightness() {
+	enableBrightness() {
 		if (this.brightness.style.display == 'none') {
 			this.brightness.style.display = 'inline';
 		} else {
