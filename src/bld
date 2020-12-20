@@ -1,4 +1,7 @@
 tsc -t es5 script.ts
 stylus -I node_modules/nib/lib style.styl -o style.css
 cp pi.desktop ~/.config/autostart
-cp autostart /etc/xdg/lxsession/LXDE-pi
+if [ -f "/etc/xdg" ]
+then
+	cp autostart /etc/xdg/lxsession/LXDE-pi
+fi

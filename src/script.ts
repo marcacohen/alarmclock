@@ -273,6 +273,8 @@ class Clock
 	{
 		this.isAlarm = false;
 		this.isTimer = false;
+		this.isInterval = false;
+		this.isSleep = false;
 
 		// Create proper interfaces to the dials
 		this.hours = new SpinnerGroupDigits("hours", 1, 1, 12);
@@ -361,6 +363,8 @@ class Clock
 	time24: Time;
 	isAlarm: boolean;
 	isTimer: boolean;
+	isInterval: boolean;
+	isSleep: boolean;
 }
 
 /*
@@ -575,6 +579,28 @@ class Main {
 	}
 
 	set timerMode(value: boolean) {
+		this._timerMode = value;
+		this.refreshClock();
+
+		if (value) {
+			$(".timer-set").addClass("toggled");
+			$(".arrow").removeClass("hidden");
+			$(".arrow").removeClass("hidden");
+			$(".am-pm").addClass("hidden");
+			$(".am-pm .arrow").addClass("hidden");
+		}
+		else {
+			$(".timer-set").removeClass("toggled");
+			$(".arrow").addClass("hidden");
+			$(".arrow").addClass("hidden");
+			$(".am-pm").removeClass("hidden");
+			$(".am-pm .arrow").addClass("hidden");
+			if(this.clock.hr24Mode) {
+				$(".alarm-24hr").addClass("toggled");
+			} else {
+				$(".alarm-24hr").removeClass("toggled");
+			}
+		}
 	}
 
 	toggleAlarmMode()
@@ -611,30 +637,39 @@ class Main {
 	{
 		if(this.alarmMode)
 		{
-			if(!this.alarm.hr24Mode)
-			{
+			if(!this.alarm.hr24Mode) {
 				var time12: Time12 = this.alarm.time24.to12();
 				time12.hours++;
 
 				if (time12.hours > 12) time12.hours = 1;
 				this.alarm.time24 = Time.from12(time12);
-			}
-			else
-			{
+			} else {
 				var hours = this.alarm.time24.hours;
 				hours++;
 				if (hours > 23) hours = 0;
 				this.alarm.time24.hours = hours;
 			}
-
 			this.alarm.updateTime();
+		} else if(this.timerMode) {
+			if(!this.timer.hr24Mode) {
+				var time12: Time12 = this.timer.time24.to12();
+				time12.hours++;
+
+				if (time12.hours > 12) time12.hours = 1;
+				this.timer.time24 = Time.from12(time12);
+			} else {
+				var hours = this.timer.time24.hours;
+				hours++;
+				if (hours > 23) hours = 0;
+				this.timer.time24.hours = hours;
+			}
+			this.timer.updateTime();
 		}
 	}
 
 	decrementAlarmHours()
 	{
-		if(this.alarmMode)
-		{
+		if(this.alarmMode) {
 			if(!this.alarm.hr24Mode)
 			{
 				var time12: Time12 = this.alarm.time24.to12();
@@ -642,40 +677,62 @@ class Main {
 
 				if (time12.hours < 1) time12.hours = 12;
 				this.alarm.time24 = Time.from12(time12);
-			}
-			else
-			{
+			} else {
 				var hours = this.alarm.time24.hours;
 				hours--;
 				if (hours < 0) hours = 23;
 				this.alarm.time24.hours = hours;
 			}
-
 			this.alarm.updateTime();
+		} else if(this.timerMode) {
+			if(!this.timer.hr24Mode)
+			{
+				var time12: Time12 = this.timer.time24.to12();
+				time12.hours--;
+
+				if (time12.hours < 1) time12.hours = 12;
+				this.timer.time24 = Time.from12(time12);
+			} else {
+				var hours = this.timer.time24.hours;
+				hours--;
+				if (hours < 0) hours = 23;
+				this.timer.time24.hours = hours;
+			}
+			this.timer.updateTime();
 		}
 	}
 
 	incrementAlarmMinutes()
 	{
-		if(this.alarmMode)
-		{
+		if(this.alarmMode) {
 			var minutes = this.alarm.time24.minutes;
 			minutes++;
 			if (minutes > 59) minutes = 0;
 			this.alarm.time24.minutes = minutes;
 			this.alarm.updateTime();
+		} else if(this.timerMode) {
+			var minutes = this.timer.time24.minutes;
+			minutes++;
+			if (minutes > 59) minutes = 0;
+			this.timer.time24.minutes = minutes;
+			this.timer.updateTime();
 		}
 	}
 
 	decrementAlarmMinutes()
 	{
-		if(this.alarmMode)
-		{
+		if(this.alarmMode) {
 			var minutes = this.alarm.time24.minutes;
 			minutes--;
 			if (minutes < 0) minutes = 59;
 			this.alarm.time24.minutes = minutes;
 			this.alarm.updateTime();
+		} else if(this.timerMode) {
+			var minutes = this.timer.time24.minutes;
+			minutes--;
+			if (minutes < 0) minutes = 59;
+			this.timer.time24.minutes = minutes;
+			this.timer.updateTime();
 		}
 	}
 
@@ -699,6 +756,16 @@ class Main {
 			this.alarm.time24 = Time.from12(time12);
 			this.alarm.updateTime();
 		}
+	}
+
+	timerToSleep() {
+		this.timer.isSleep = true;
+		this.timer.isInterval = false;
+	}
+
+	timerToInterval() {
+		this.timer.isInterval = true;
+		this.timer.isSleep = false;
 	}
 
 	loadAlarmMelodyFile()
