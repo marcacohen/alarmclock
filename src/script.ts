@@ -10,6 +10,13 @@ declare var $: any;
  * importing it to and from 12/hour format
 */
 
+$(document).ready(function()
+{ 
+    $(document).bind("contextmenu",function(e){
+        return false;
+    }); 
+});
+
 // Required interface for 12 hour import/export format
 interface Time12
 {

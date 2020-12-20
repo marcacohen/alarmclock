@@ -1,3 +1,17 @@
+/*
+ * A thin wrapper around Javascripts Date object
+ * Provides extra methods for better managing
+ * the date.
+ *
+ * Javascript handles time in 24-hour format so we keep
+ * to that but add some extra methods for exporting and
+ * importing it to and from 12/hour format
+*/
+$(document).ready(function () {
+    $(document).bind("contextmenu", function (e) {
+        return false;
+    });
+});
 var Time = /** @class */ (function () {
     // A date object can be provided if desired to give a preset time
     // otherwise a current date will be creted
