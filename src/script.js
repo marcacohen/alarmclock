@@ -379,7 +379,10 @@ var Main = /** @class */ (function () {
     };
     Main.prototype.updateBrightness = function (ev) {
         var brightness = ev.target.value;
-        $(document.documentElement).css('filter', 'brightness(' + brightness + ')');
+        //$(document.documentElement).css('filter', 'brightness(' + brightness + ')');
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", '127.0.0.1:5000/' + '?b=' + brightness, false);
+        xmlHttp.send(null);
         localStorage.setItem('mclock.brightness', brightness);
     };
     // Gets called every second
