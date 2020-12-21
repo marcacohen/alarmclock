@@ -851,10 +851,10 @@ class Main {
 	timerEnable() {
 		this.timerEnabled = !this.timerEnabled;
 		if(this.timerEnabled) {
-			$(".timer-enable").addClass("toggled");
+			$(".timer-enable").prop("checked", true);
 			this.timer.startTime = Math.floor(this.clock.time24.date.getTime() / 1000);
 		} else {
-			$(".timer-enable").removeClass("toggled");
+			$(".timer-enable").prop("checked", false);
 			this.timer.startTime = 0
 		}
 	}
