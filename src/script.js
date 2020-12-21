@@ -239,7 +239,6 @@ var Clock = /** @class */ (function () {
     // and reflect those changes on the dials
     Clock.prototype.currentTime = function () {
         this.time24 = new Time();
-        var now = Math.floor(this.time24.date.getTime() / 1000);
         this.updateTime(false);
     };
     // Update the dials to whatever the current 24-hour backend has
@@ -265,6 +264,7 @@ var Clock = /** @class */ (function () {
         }
         else if (this.isTimer) {
             this.secondsToWait = (this.time24.hours * 3600) + (this.time24.minutes * 60);
+            console.log(this.secondsToWait);
             if (saveTimer) {
                 localStorage.setItem('mclock.timer.hours', this.time24.hours.toString());
                 localStorage.setItem('mclock.timer.minutes', this.time24.minutes.toString());
@@ -420,6 +420,21 @@ var Main = /** @class */ (function () {
                 if (alarmHours == clockHours &&
                     alarmMinutes == clockMinutes)
                     this.soundAlarm();
+            }
+        }
+        if (!this.timerMode) {
+            this.clock.currentTime();
+            if (this.timerEnabled) {
+                var startTime = this.timer.startTime;
+                var secondsToWait = this.timer.secondsToWait;
+                var currentSeconds = Math.floor(this.clock.time24.date.getTime() / 1000);
+                //console.log('startTime:', startTime);
+                //console.log('secondsToWait:', secondsToWait);
+                //console.log('currentSeconds:', currentSeconds);
+                if (startTime + secondsToWait < currentSeconds) {
+                    this.soundAlarm();
+                    this.timerEnable();
+                }
             }
         }
     };
@@ -694,6 +709,15 @@ var Main = /** @class */ (function () {
         }
     };
     Main.prototype.timerEnable = function () {
+        this.timerEnabled = !this.timerEnabled;
+        if (this.timerEnabled) {
+            $(".timer-enable").addClass("toggled");
+            this.timer.startTime = Math.floor(this.clock.time24.date.getTime() / 1000);
+        }
+        else {
+            $(".timer-enable").removeClass("toggled");
+            this.timer.startTime = 0;
+        }
     };
     Main.prototype.alarmEnable = function () {
         this.alarmEnabled = !this.alarmEnabled;

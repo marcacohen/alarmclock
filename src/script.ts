@@ -303,7 +303,6 @@ class Clock
 	currentTime()
 	{
 		this.time24 = new Time();
-		let now = Math.floor(this.time24.date.getTime() / 1000)
 		this.updateTime(false);
 	}
 	
@@ -332,6 +331,7 @@ class Clock
 			localStorage.setItem('mclock.alarm.pm', this.time24.to12().pm.toString());
 		} else if (this.isTimer) {
 			this.secondsToWait = (this.time24.hours * 3600) + (this.time24.minutes * 60)
+			console.log(this.secondsToWait);
 			if (saveTimer) {
 				localStorage.setItem('mclock.timer.hours', this.time24.hours.toString());
 				localStorage.setItem('mclock.timer.minutes', this.time24.minutes.toString());
@@ -369,6 +369,7 @@ class Clock
 	isAlarm: boolean;
 	isTimer: boolean;
 	secondsToWait: number;
+	startTime: number;
 }
 
 /*
@@ -538,6 +539,24 @@ class Main {
 					this.soundAlarm();
 			}
 		}
+		if (!this.timerMode)
+		{
+			this.clock.currentTime();
+
+			if (this.timerEnabled) {
+				var startTime = this.timer.startTime;
+				var secondsToWait = this.timer.secondsToWait;
+				var currentSeconds = Math.floor(this.clock.time24.date.getTime() / 1000)
+				//console.log('startTime:', startTime);
+				//console.log('secondsToWait:', secondsToWait);
+				//console.log('currentSeconds:', currentSeconds);
+
+				if (startTime + secondsToWait < currentSeconds) {
+					this.soundAlarm();
+					this.timerEnable();
+				}
+			}
+		}
 	}
 
 	// Used when switching clocks between current clock and alarm clock
@@ -626,13 +645,11 @@ class Main {
 		}
 	}
 
-	toggleAlarmMode()
-	{
+	toggleAlarmMode() {
 		this.alarmMode = !this.alarmMode;
 	}
 
-	toggleTimerMode()
-	{
+	toggleTimerMode() {
 		this.timerMode = !this.timerMode;
 	}
 
@@ -832,6 +849,14 @@ class Main {
 	}
 
 	timerEnable() {
+		this.timerEnabled = !this.timerEnabled;
+		if(this.timerEnabled) {
+			$(".timer-enable").addClass("toggled");
+			this.timer.startTime = Math.floor(this.clock.time24.date.getTime() / 1000);
+		} else {
+			$(".timer-enable").removeClass("toggled");
+			this.timer.startTime = 0
+		}
 	}
 
 	alarmEnable()
