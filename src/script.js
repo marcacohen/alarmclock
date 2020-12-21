@@ -92,7 +92,7 @@ var Spinner = /** @class */ (function () {
         this.groupEntryId = groupEntryId;
         this.notchId = notchId;
     }
-    // Re-update the spinner based on the eisting value stored here
+    // Re-update the spinner based on the existing value stored here
     Spinner.prototype.refresh = function () {
         $("." + this.groupName
             + " .slot-" + this.groupEntryId
@@ -239,6 +239,7 @@ var Clock = /** @class */ (function () {
     // and reflect those changes on the dials
     Clock.prototype.currentTime = function () {
         this.time24 = new Time();
+        var now = Math.floor(this.time24.date.getTime() / 1000);
         this.updateTime();
     };
     // Update the dials to whatever the current 24-hour backend has
@@ -314,6 +315,7 @@ var Main = /** @class */ (function () {
         // and the timer clock
         this.timer = new Clock();
         this.timer.isTimer = true;
+        this.timer.hr24Mode = true;
         var hours = localStorage.getItem('mclock.alarm.hours');
         this.alarm.time24.hours = 0;
         this.alarm.time24.minutes = 0;
@@ -417,7 +419,7 @@ var Main = /** @class */ (function () {
             }
         }
     };
-    // Used when switching clocks between curren clock and alarm clock
+    // Used when switching clocks between current clock and alarm clock
     Main.prototype.refreshClock = function () {
         if (this.alarmMode) {
             // Apply new values to all the sliders for this clock

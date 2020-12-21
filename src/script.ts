@@ -119,7 +119,7 @@ class Spinner
 		this.notchId = notchId;
 	}
 	
-	// Re-update the spinner based on the eisting value stored here
+	// Re-update the spinner based on the existing value stored here
 	refresh()
 	{
 		$("." + this.groupName 
@@ -303,6 +303,7 @@ class Clock
 	currentTime()
 	{
 		this.time24 = new Time();
+		let now = Math.floor(this.time24.date.getTime() / 1000)
 		this.updateTime();
 	}
 	
@@ -407,6 +408,7 @@ class Main {
 		// and the timer clock
 		this.timer = new Clock();
 		this.timer.isTimer = true;
+		this.timer.hr24Mode = true;
 
 		let hours = localStorage.getItem('mclock.alarm.hours')
 		this.alarm.time24.hours = 0;
@@ -534,7 +536,7 @@ class Main {
 		}
 	}
 
-	// Used when switching clocks between curren clock and alarm clock
+	// Used when switching clocks between current clock and alarm clock
 	refreshClock() {
 		if (this.alarmMode) {
 			// Apply new values to all the sliders for this clock
