@@ -304,11 +304,11 @@ class Clock
 	{
 		this.time24 = new Time();
 		let now = Math.floor(this.time24.date.getTime() / 1000)
-		this.updateTime();
+		this.updateTime(false);
 	}
 	
 	// Update the dials to whatever the current 24-hour backend has
-	updateTime()
+	updateTime(saveTimer = true)
 	{
 		if(this.hr24Mode)
 		{
@@ -330,7 +330,7 @@ class Clock
 			localStorage.setItem('mclock.alarm.hours', this.time24.hours.toString());
 			localStorage.setItem('mclock.alarm.minutes', this.time24.minutes.toString());
 			localStorage.setItem('mclock.alarm.pm', this.time24.to12().pm.toString());
-		} else if (this.isTimer) {
+		} else if (this.isTimer && saveTimer) {
 			localStorage.setItem('mclock.timer.hours', this.time24.hours.toString());
 			localStorage.setItem('mclock.timer.minutes', this.time24.minutes.toString());
 		}
@@ -355,7 +355,7 @@ class Clock
 			this.hours = new SpinnerGroupDigits("hours", 0, 1, 12);
 		}
 		
-		this.updateTime();
+		this.updateTime(false);
 	}
 	
 	hours: SpinnerGroupDigits;
