@@ -330,9 +330,12 @@ class Clock
 			localStorage.setItem('mclock.alarm.hours', this.time24.hours.toString());
 			localStorage.setItem('mclock.alarm.minutes', this.time24.minutes.toString());
 			localStorage.setItem('mclock.alarm.pm', this.time24.to12().pm.toString());
-		} else if (this.isTimer && saveTimer) {
-			localStorage.setItem('mclock.timer.hours', this.time24.hours.toString());
-			localStorage.setItem('mclock.timer.minutes', this.time24.minutes.toString());
+		} else if (this.isTimer) {
+			this.secondsToWait = (this.time24.hours * 3600) + (this.time24.minutes * 60)
+			if (saveTimer) {
+				localStorage.setItem('mclock.timer.hours', this.time24.hours.toString());
+				localStorage.setItem('mclock.timer.minutes', this.time24.minutes.toString());
+			}
 		}
 	}
 	
@@ -365,6 +368,7 @@ class Clock
 	time24: Time;
 	isAlarm: boolean;
 	isTimer: boolean;
+	secondsToWait: number;
 }
 
 /*
