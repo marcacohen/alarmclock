@@ -257,9 +257,13 @@ var Clock = /** @class */ (function () {
                 this.amPm.notchId = 0;
         }
         if (this.isAlarm) {
-            localStorage.setItem('mclock.hours', this.time24.hours.toString());
-            localStorage.setItem('mclock.minutes', this.time24.minutes.toString());
-            localStorage.setItem('mclock.pm', this.time24.to12().pm.toString());
+            localStorage.setItem('mclock.alarm.hours', this.time24.hours.toString());
+            localStorage.setItem('mclock.alarm.minutes', this.time24.minutes.toString());
+            localStorage.setItem('mclock.alarm.pm', this.time24.to12().pm.toString());
+        }
+        else if (this.isTimer) {
+            localStorage.setItem('mclock.timer.hours', this.time24.hours.toString());
+            localStorage.setItem('mclock.timer.minutes', this.time24.minutes.toString());
         }
     };
     Object.defineProperty(Clock.prototype, "hr24Mode", {
@@ -302,7 +306,7 @@ var Main = /** @class */ (function () {
             $("#player")[0].volume = .1;
             $(".alarm-melody").addClass("toggled");
         }
-        // Creae the clock
+        // Create the clock
         this.clock = new Clock();
         // and the alarm clock, disabling alarm mode
         this.alarm = new Clock();
@@ -310,23 +314,31 @@ var Main = /** @class */ (function () {
         // and the timer clock
         this.timer = new Clock();
         this.timer.isTimer = true;
-        this.timer.time24.hours = 0;
-        this.timer.time24.minutes = 0;
-        this.timer.time24.to12().pm = false;
-        var hours = localStorage.getItem('mclock.hours');
+        var hours = localStorage.getItem('mclock.alarm.hours');
         this.alarm.time24.hours = 0;
         this.alarm.time24.minutes = 0;
         this.alarm.time24.to12().pm = false;
         if (hours != null && hours != 'NaN') {
             this.alarm.time24.hours = parseInt(hours);
         }
-        var minutes = localStorage.getItem('mclock.minutes');
+        var minutes = localStorage.getItem('mclock.alarm.minutes');
         if (minutes != null && minutes != 'NaN') {
             this.alarm.time24.minutes = parseInt(minutes);
         }
-        var pm = localStorage.getItem('mclock.pm');
+        var pm = localStorage.getItem('mclock.alarm.pm');
         if (pm != null && pm != 'NaN') {
             this.alarm.time24.to12().pm = (pm == 'true');
+        }
+        var thours = localStorage.getItem('mclock.timer.hours');
+        this.timer.time24.hours = 0;
+        this.timer.time24.minutes = 0;
+        this.timer.time24.to12().pm = false;
+        if (thours != null && thours != 'NaN') {
+            this.timer.time24.hours = parseInt(thours);
+        }
+        var tminutes = localStorage.getItem('mclock.timer.minutes');
+        if (tminutes != null && tminutes != 'NaN') {
+            this.timer.time24.minutes = parseInt(tminutes);
         }
         this.alarmMode = false;
         var hr24Mode = localStorage.getItem('mclock.hr24Mode') == 'true';
@@ -413,6 +425,13 @@ var Main = /** @class */ (function () {
             // Re-apply old values since the dial positions are from a
             // previous clock and need changing to reflect this clock again
             this.alarm.refresh();
+        }
+        else if (this.timerMode) {
+            // Apply new values to all the sliders for this clock
+            this.timer.updateTime();
+            // Re-apply old values since the dial positions are from a
+            // previous clock and need changing to reflect this clock again
+            this.timer.refresh();
         }
         else {
             this.updateClock();
