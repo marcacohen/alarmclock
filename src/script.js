@@ -398,7 +398,7 @@ var Main = /** @class */ (function () {
     Main.prototype.setBrightness = function (brightness) {
         localStorage.setItem('mclock.brightness', brightness);
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", '127.0.0.1:5000/' + '?b=' + brightness, false);
+        xmlHttp.open("GET", 'http://127.0.0.1:5000/' + '?b=' + brightness, false);
         //xmlHttp.send(null);
     };
     Main.prototype.updateBrightness = function (ev) {
