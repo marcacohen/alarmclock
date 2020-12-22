@@ -547,10 +547,11 @@ class Main {
 		if (++this.count > 2) {
 			$('.strip').css('transition', 'all 1s linear')
 		}
+		if (!this.alarmMode && !this.timerMode) {
+			this.clock.currentTime();
+		}
 		if (!this.alarmMode)
 		{
-			this.clock.currentTime();
-
 			if(this.alarmEnabled && !this.alarmPlaying)
 			{
 				var alarmHours = this.alarm.time24.hours;
@@ -566,8 +567,6 @@ class Main {
 		}
 		if (!this.timerMode)
 		{
-			this.clock.currentTime();
-
 			if (this.timerEnabled) {
 				var startTime = this.timer.startTime;
 				var secondsToWait = this.timer.secondsToWait;
