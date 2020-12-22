@@ -399,7 +399,7 @@ var Main = /** @class */ (function () {
         localStorage.setItem('mclock.brightness', brightness);
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open("GET", 'http://127.0.0.1:5000/' + '?b=' + brightness, false);
-        //xmlHttp.send(null);
+        xmlHttp.send(null);
     };
     Main.prototype.updateBrightness = function (ev) {
         var brightness = ev.target.value;
