@@ -9,8 +9,11 @@ def save():
     b = request.args.get('b')
     if b:
         b = b.strip();
-        with open(FILE, 'w') as file:
-            file.write(b)
+        try:
+            with open(FILE, 'w') as file:
+                file.write(b)
+        except:
+            pass
     return ''
 
 if __name__ == '__main__':
