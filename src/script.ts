@@ -544,6 +544,7 @@ class Main {
 
 	// Gets called every second
 	updateClock() {
+		$('#date').text(Date().toString().substr(0, 15));
 		if (++this.count > 2) {
 			$('.strip').css('transition', 'all 1s linear')
 		}

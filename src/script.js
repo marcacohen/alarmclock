@@ -429,6 +429,7 @@ var Main = /** @class */ (function () {
     };
     // Gets called every second
     Main.prototype.updateClock = function () {
+        $('#date').text(Date().toString().substr(0, 15));
         if (++this.count > 2) {
             $('.strip').css('transition', 'all 1s linear');
         }
