@@ -1,4 +1,3 @@
 cd $HOME/p/alarmclock
-git pull
-#cd src
-#./bld
+git fetch origin master
+git reset --hard origin/master
