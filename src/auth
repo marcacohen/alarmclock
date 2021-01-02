@@ -1,6 +1,6 @@
+REDIRECT_URI=http://127.0.0.1:5000/
 SCOPES="streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state"
 SCOPE=
-
 for i in $SCOPES
 do
   if [ "$SCOPE" == "" ]
@@ -11,12 +11,11 @@ do
   fi
 done
 
-URL="https://accounts.spotify.com/authorize?client_id=98295ad63a114cf39825490f37281c36&response_type=code&redirect_uri=http://127.0.0.1:5000/&scope=$SCOPE"
+URL="https://accounts.spotify.com/authorize?client_id=98295ad63a114cf39825490f37281c36&response_type=code&redirect_uri=$REDIRECT_URI&scope=$SCOPE"
 open -na "Google Chrome" --args --incognito $URL
 
 echo -n "Enter auth token: "
 read AUTH_TOKEN
 
-printf "\nHere's your access token:\n"
-curl -s -H "Authorization: Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI" -d grant_type=authorization_code -d code=$AUTH_TOKEN -d redirect_uri=http://localhost:1313 https://accounts.spotify.com/api/token | jq -r '.access_token'
-
+printf "\nHere are your access and refresh tokens:\n"
+curl -s -H "Authorization: Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI" -d grant_type=authorization_code -d code=$AUTH_TOKEN -d redirect_uri=$REDIRECT_URI https://accounts.spotify.com/api/token | jq -r '.access_token, .refresh_token'
