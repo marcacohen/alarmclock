@@ -17,5 +17,6 @@ open $URL
 echo -n "Enter auth token: "
 read AUTH_TOKEN
 
-curl -s -H "Authorization: Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI" -d grant_type=authorization_code -d code=$AUTH_TOKEN -d redirect_uri=http://localhost:1313 https://accounts.spotify.com/api/token | jq '.access_token'
+printf "\nHere's your access token:\n"
+curl -s -H "Authorization: Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI" -d grant_type=authorization_code -d code=$AUTH_TOKEN -d redirect_uri=http://localhost:1313 https://accounts.spotify.com/api/token | jq -r '.access_token'
 
