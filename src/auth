@@ -1,3 +1,4 @@
+set -x
 SCOPES="streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state"
 SCOPE=
 
@@ -12,7 +13,7 @@ do
 done
 
 URL="https://accounts.spotify.com/authorize?client_id=98295ad63a114cf39825490f37281c36&response_type=code&redirect_uri=http://localhost:1313&scope=$SCOPE"
-open $URL
+open -na "Google Chrome" --args --incognito $URL
 
 echo -n "Enter auth token: "
 read AUTH_TOKEN
