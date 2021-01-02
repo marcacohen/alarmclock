@@ -1,5 +1,3 @@
-set -x 
-
 SCOPES="streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state"
 SCOPE=
 
@@ -16,4 +14,8 @@ done
 URL="https://accounts.spotify.com/authorize?client_id=98295ad63a114cf39825490f37281c36&response_type=code&redirect_uri=http://localhost:1313&scope=$SCOPE"
 open $URL
 
-#curl -X "GET" "https://accounts.spotify.com/authorize?client_id=98295ad63a114cf39825490f37281c36&response_type=code&redirect_uri=http://localhost:1313&scope=$SCOPE"
+echo -n "Enter auth token: "
+read AUTH_TOKEN
+
+curl -s -H "Authorization: Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI" -d grant_type=authorization_code -d code=$AUTH_TOKEN -d redirect_uri=http://localhost:1313 https://accounts.spotify.com/api/token | jq '.access_token'
+
