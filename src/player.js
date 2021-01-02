@@ -160,7 +160,7 @@
                         p = Object(l.a)(d, 2),
                         g = p[0],
                         j = p[1],
-                        m = Object(o.useState)(["spotify:album:51QBkcL7S3KYdXSSA0zM9R"]),
+                        m = Object(o.useState)(["spotify:playlist:37i9dQZF1DX9qRMAPlxxDn"]),
                         x = Object(l.a)(m, 2),
                         v = x[0],
                         O = x[1],

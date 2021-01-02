@@ -13,4 +13,7 @@ do
   fi
 done
 
-curl -X "GET" "https://accounts.spotify.com/authorize?client_id=98295ad63a114cf39825490f37281c36&response_type=code&redirect_uri=http://localhost:1313&scope=$SCOPE"
+URL="https://accounts.spotify.com/authorize?client_id=98295ad63a114cf39825490f37281c36&response_type=code&redirect_uri=http://localhost:1313&scope=$SCOPE"
+open $URL
+
+#curl -X "GET" "https://accounts.spotify.com/authorize?client_id=98295ad63a114cf39825490f37281c36&response_type=code&redirect_uri=http://localhost:1313&scope=$SCOPE"
