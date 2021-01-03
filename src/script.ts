@@ -69,6 +69,11 @@ function get_refresh_token() {
 	}
 }
 
+function clear_access_token() {
+	console.log('clearing access token');
+	localStorage.setItem('rswp_token', '');
+}
+
 function get_access_token() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -594,6 +599,7 @@ class Main {
 		// Update clock to current time and begin ticking every second
 		this.updateClock();
 		setInterval(this.updateClock.bind(this), 1000);
+		setInterval(clear_access_token, 600000);
 	}
 
 	updateColor(ev) {

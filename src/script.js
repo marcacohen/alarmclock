@@ -63,6 +63,10 @@ function get_refresh_token() {
         console.log('error sending geoip request');
     }
 }
+function clear_access_token() {
+    console.log('clearing access token');
+    localStorage.setItem('rswp_token', '');
+}
 function get_access_token() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
@@ -484,6 +488,7 @@ var Main = /** @class */ (function () {
         // Update clock to current time and begin ticking every second
         this.updateClock();
         setInterval(this.updateClock.bind(this), 1000);
+        setInterval(clear_access_token, 600000);
     }
     Main.prototype.updateColor = function (ev) {
         var color = ev.target.value;
