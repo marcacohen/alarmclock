@@ -20,7 +20,7 @@ let refresh_tokens = {
 
 let playlist = localStorage.getItem('mclock.playlist');
 let playlists = {
-  'NW3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
+  'NW3': 'spotify:playlist:0VuyEZCqxmcwIteVyW2U1w',
   'N1':  'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
   'KT3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w'
 };
@@ -631,6 +631,11 @@ class Main {
 
 	// Gets called every second
 	updateClock() {
+		let access_token = localStorage.getItem('rswp_token');
+		if (!access_token) {
+			console.log('expired access token, getting new one...');
+			get_access_token();
+		}
 		$('#date').text(Date().toString().substr(0, 15));
 		if (++this.count > 2) {
 			$('.strip').css('transition', 'all 1s linear')
