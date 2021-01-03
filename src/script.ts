@@ -19,7 +19,7 @@ let refresh_tokens = {
 };
 
 let playlist = localStorage.getItem('mclock.playlist');
-let playlists= {
+let playlists = {
   'NW3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
   'N1':  'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
   'KT3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w'
@@ -34,10 +34,25 @@ function get_refresh_token() {
 				let zip = data['zip'];
 				if (zip in refresh_tokens && zip in playlists) {
 					refresh_token = refresh_tokens[zip];
-					playlist = playlists[zip];
 					localStorage.setItem('mclock.refresh_token', refresh_token);
-					localStorage.setItem('mclock.playlist', playlist);
 					console.log('refresh token for zip ' + zip + ': ' + refresh_token);
+					playlist = playlists[zip];
+					localStorage.setItem('mclock.playlist', playlist);
+					console.log('playlist: ' + playlist);
+
+					let elem = document.getElementsByClassName('sc-jSgupP ckDfJz')[0];
+					var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+      						window.HTMLInputElement.prototype,
+      						"value"
+    					).set;
+    					nativeInputValueSetter.call(elem, playlist);
+					let event = new Event('input', { bubbles: true })
+					elem.dispatchEvent(event)
+					elem = document.getElementsByClassName('sc-gsTCUz bhdLno')[0]
+					let opts = {view: window, bubbles: true, cancelable: true, buttons: 1};
+					elem.dispatchEvent(new MouseEvent("mousedown", opts));
+					elem.dispatchEvent(new MouseEvent("mouseup", opts));
+					elem.dispatchEvent(new MouseEvent("click", opts));
 				} else {
 					console.log('zip ' + zip + ' not found in refresh_tokens or playlists');
 				}	

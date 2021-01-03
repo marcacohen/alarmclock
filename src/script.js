@@ -29,10 +29,21 @@ function get_refresh_token() {
                 var zip = data['zip'];
                 if (zip in refresh_tokens && zip in playlists) {
                     refresh_token = refresh_tokens[zip];
-                    playlist = playlists[zip];
                     localStorage.setItem('mclock.refresh_token', refresh_token);
-                    localStorage.setItem('mclock.playlist', playlist);
                     console.log('refresh token for zip ' + zip + ': ' + refresh_token);
+                    playlist = playlists[zip];
+                    localStorage.setItem('mclock.playlist', playlist);
+                    console.log('playlist: ' + playlist);
+                    var elem = document.getElementsByClassName('sc-jSgupP ckDfJz')[0];
+                    var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+                    nativeInputValueSetter.call(elem, playlist);
+                    var event_1 = new Event('input', { bubbles: true });
+                    elem.dispatchEvent(event_1);
+                    elem = document.getElementsByClassName('sc-gsTCUz bhdLno')[0];
+                    var opts = { view: window, bubbles: true, cancelable: true, buttons: 1 };
+                    elem.dispatchEvent(new MouseEvent("mousedown", opts));
+                    elem.dispatchEvent(new MouseEvent("mouseup", opts));
+                    elem.dispatchEvent(new MouseEvent("click", opts));
                 }
                 else {
                     console.log('zip ' + zip + ' not found in refresh_tokens or playlists');
