@@ -859,6 +859,7 @@ class Main {
 
 	soundAlarm()
 	{
+		//$('.rswp__toggle').click();
 		if(this.fileReader !== undefined && this.fileReaderDone)
 		{
 			if(this.alarmPlaying)

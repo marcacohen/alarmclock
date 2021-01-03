@@ -724,6 +724,7 @@ var Main = /** @class */ (function () {
         }
     };
     Main.prototype.soundAlarm = function () {
+        //$('.rswp__toggle').click();
         if (this.fileReader !== undefined && this.fileReaderDone) {
             if (this.alarmPlaying) {
                 $("#player")[0].pause();

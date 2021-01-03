@@ -2308,12 +2308,6 @@
                 "> div + div": {
                     marginLeft: N(10)
                 },
-                "@media (max-width: 1023px)": {
-                    bottom: 0,
-                    position: "absolute",
-                    right: 0,
-                    width: "auto"
-                }
             }, (function(e) {
                 var t = e.style;
                 return {
@@ -2352,7 +2346,7 @@
             Pe = I("div")({
                 alignItems: "center",
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
                 justifyContent: "center",
                 position: "relative",
                 "> *": {
