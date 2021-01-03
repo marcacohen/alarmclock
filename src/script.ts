@@ -10,6 +10,7 @@ declare var $: any;
  * importing it to and from 12/hour format
 */
 
+let access_token = '';
 let refresh_token = localStorage.getItem('mclock.refresh_token');
 let refresh_tokens = {
   'NW3': 'AQBMSznXPzgILC05wR1QcaKoANYK8yMTzAPgxCQxIazw6Xfj05v21AkmXg22_CS0GrU2gMP3zTAj9lesYTqj1OXrzbyK5vd4a3VI8j1CITeEg98YAqyK22ZZ1bcI02XcN5k',
@@ -19,11 +20,69 @@ let refresh_tokens = {
 
 let playlist = localStorage.getItem('mclock.playlist');
 let playlists= {
+  'NW3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
+  'N1':  'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
+  'KT3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w'
 };
 
+function get_refresh_token() {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+        	if (this.readyState == 4 && this.status == 200) {
+			let data = JSON.parse(xmlHttp.responseText);
+			if ('zip' in data) {
+				let zip = data['zip'];
+				if (zip in refresh_tokens && zip in playlists) {
+					refresh_token = refresh_tokens[zip];
+					playlist = playlists[zip];
+					localStorage.setItem('mclock.refresh_token', refresh_token);
+					localStorage.setItem('mclock.playlist', playlist);
+					console.log('refresh token for zip ' + zip + ': ' + refresh_token);
+				} else {
+					console.log('zip ' + zip + ' not found in refresh_tokens or playlists');
+				}	
+			} else {
+				console.log('zip not found in ajax response');
+			}
+        	};
+	};
+    	xmlHttp.open("GET", 'http://ip-api.com/json', false); 
+	try {
+    		xmlHttp.send(null);
+	} catch {
+		console.log('error sending geoip request');
+	}
+}
+
+function get_access_token() {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+        	if (this.readyState == 4 && this.status == 200) {
+			let data = JSON.parse(xmlHttp.responseText);
+			if ('access_token' in data) {
+				access_token = data['access_token'];
+				localStorage.setItem('rswp_token', access_token);
+				console.log('access token: ' + access_token);
+			} else {
+				console.log('access token not found in refresh response');
+			}
+        	};
+	};
+    	xmlHttp.open('POST', 'https://accounts.spotify.com/api/token', false); 
+	xmlHttp.setRequestHeader('Authorization', 'Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI');
+	xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	let body = 'grant_type=refresh_token&refresh_token=' + refresh_token;
+	try {
+    		xmlHttp.send(body);
+	} catch {
+		console.log('error sending refresh request');
+	}
+}
 
 $(document).ready(function()
 { 
+    get_refresh_token();
+    get_access_token();
     $(document).bind("contextmenu",function(e){
         return false;
     }); 
@@ -535,6 +594,7 @@ class Main {
 		try {
     			xmlHttp.send(null);
 		} catch {
+			console.log('error setting brightness');
 		}
 	}
 	
