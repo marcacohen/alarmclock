@@ -91,6 +91,18 @@ function get_access_token() {
 	}
 }
 
+function update_player_state() {
+	let m = window.main;
+	if(m.alarmPlaying) {
+		m.alarmPlaying = false;
+	} else {
+		m.alarmPlaying = true;
+		// Disable sleep mode in case it was activated
+		$(".alarm-snooze").removeClass("toggled");
+		m.alarmSleepActivated = false;
+	}
+}
+
 $(document).ready(function()
 { 
     let version = $('#version').text();
@@ -487,15 +499,6 @@ class Main {
 			color = '#2e5090';
 		}
 
-		let audio = localStorage.getItem('mclock.audio');
-		if (audio) {
-			this.fileReader = new FileReader();
-			this.fileReaderDone = true;
-			$("#player")[0].src = audio;
-			$("#player")[0].volume = .1;
-			$(".alarm-melody").addClass("toggled");
-		}
-
 		// Create the clock
 		this.clock = new Clock();
         	// and the alarm clock, disabling alarm mode
@@ -550,12 +553,7 @@ class Main {
   	this.brightness.addEventListener("input", this.updateBrightness.bind(this), false);
 	this.brightness.select();
 
-	$(".volume").click(this.enableVolume.bind(this));
-	this.volume = document.querySelector("#volume");
-	this.volume.value = volume;
-	this.setVolume(volume);
-  	this.volume.addEventListener("input", this.updateVolume.bind(this), false);
-	this.volume.select();
+	//this.setVolume(volume);
 
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
         $(".timer-set").click(this.toggleTimerMode.bind(this));
@@ -576,11 +574,6 @@ class Main {
 
         $(".am-pm .up").click(this.alarmToAm.bind(this));
         $(".am-pm .down").click(this.alarmToPm.bind(this));
-
-        $(".alarm-melody").click(this.loadAlarmMelodyFile.bind(this));
-        $("#alarmTone").change(this.isLoadedAlarmMelodyFile.bind(this));
-
-        $(".alarm-melody-play").click(this.soundAlarm.bind(this));
 
         this.alarmEnabled = false;
         $(".alarm-enable").click(this.alarmEnable.bind(this));
@@ -616,19 +609,12 @@ class Main {
 	
 	setVolume(volume) {
 		localStorage.setItem('mclock.volume', volume);
-		$("#player")[0].volume = volume;
 	}
 
 	updateBrightness(ev) {
 		let brightness = ev.target.value;
 		this.setBrightness(brightness);
 	}
-
-	updateVolume(ev) {
-		let volume = ev.target.value;
-		this.setVolume(volume);
-	}
-
 
 	// Gets called every second
 	updateClock() {
@@ -774,14 +760,6 @@ class Main {
 		};
 	}
 
-	enableVolume() {
-		if (this.volume.style.display == 'none') {
-			this.volume.style.display = 'inline';
-		} else {
-			this.volume.style.display = 'none';
-		};
-	}
-
 	setAlarmColor() {
 		this.bgcolor.click();
 	}
@@ -919,55 +897,8 @@ class Main {
 		}
 	}
 
-	loadAlarmMelodyFile()
-	{
-		$("#alarmTone").click();
-	}
-
-	isLoadedAlarmMelodyFile()
-	{
-		if($("#alarmTone").val())
-		{
-			this.fileReader = new FileReader();
-			this.fileReader.readAsDataURL($('#alarmTone')[0].files[0]);
-
-			this.fileReader.onloadend = function() {
-				localStorage.setItem('mclock.audio', this.fileReader.result);
-				$("#player")[0].src = this.fileReader.result;
-				this.fileReaderDone = true;
-				$(".alarm-melody").addClass("toggled");
-			}.bind(this);
-		}
-		else
-		{
-			$(".alarm-melody").removeClass("toggled");
-			this.fileReader = undefined;
-		}
-	}
-
-	soundAlarm()
-	{
-		//$('.rswp__toggle').click();
-		if(this.fileReader !== undefined && this.fileReaderDone)
-		{
-			if(this.alarmPlaying)
-			{
-				$("#player")[0].pause();
-				$("#player")[0].currentTime = 0;
-				$(".alarm-melody-play").removeClass("toggled");
-				this.alarmPlaying = false;
-			}
-			else
-			{
-				$("#player")[0].play();
-				$(".alarm-melody-play").addClass("toggled");
-				this.alarmPlaying = true;
-
-				// Disable sleep mode in case it was activated
-				$(".alarm-snooze").removeClass("toggled");
-				this.alarmSleepActivated = false;
-			}
-		}
+	soundAlarm() {
+		$('.rswp__toggle').click();
 	}
 
 	timerEnable() {
@@ -1052,7 +983,6 @@ class Main {
 	count: number;
 	bgcolor: any;
 	brightness: any;
-	volume: any;
 	clock: Clock;
 	alarm: Clock;
 	timer: Clock;

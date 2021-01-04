@@ -3380,6 +3380,7 @@
                             }))
                         }))
                     }, a.handleClickTogglePlay = function() {
+			update_player_state();
                         return ut(a, void 0, void 0, (function() {
                             var e, t;
                             return st(this, (function(n) {
