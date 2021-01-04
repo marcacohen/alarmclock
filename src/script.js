@@ -17,7 +17,7 @@ var refresh_tokens = {
 var playlist = '';
 var playlists = {
     'NW3': 'spotify:playlist:2IlCUBWJCOvGSXGUIZuS0Q',
-    'N1': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
+    'N1': 'spotify:playlist:3LeuIBk2eYwgu8fdCwBOfo',
     'KT3': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW'
 };
 function enter_and_submit(data) {
@@ -488,7 +488,6 @@ var Main = /** @class */ (function () {
         // Update clock to current time and begin ticking every second
         this.updateClock();
         setInterval(this.updateClock.bind(this), 1000);
-        //setInterval(clear_access_token, 600000);
     }
     Main.prototype.updateColor = function (ev) {
         var color = ev.target.value;
