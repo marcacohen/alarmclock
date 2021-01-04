@@ -16,7 +16,7 @@ var refresh_tokens = {
 };
 var playlist = localStorage.getItem('mclock.playlist');
 var playlists = {
-    'NW3': 'spotify:playlist:0VuyEZCqxmcwIteVyW2U1w',
+    'NW3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
     'N1': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
     'KT3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w'
 };
