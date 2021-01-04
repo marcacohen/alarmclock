@@ -3601,7 +3601,10 @@
                             isInitializing: !0
                         }), a.player = new window.Spotify.Player({
                             getOAuthToken: function(e) {
-                                e(r)
+                                //e(r)
+				console.log('refreshing access token from player');
+				get_access_token();
+				e(access_token);
                             },
                             name: n,
                             volume: e

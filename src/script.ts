@@ -11,21 +11,34 @@ declare var $: any;
 */
 
 let access_token = '';
-let refresh_token = localStorage.getItem('mclock.refresh_token');
+let refresh_token = '';
 let refresh_tokens = {
   'NW3': 'AQBMSznXPzgILC05wR1QcaKoANYK8yMTzAPgxCQxIazw6Xfj05v21AkmXg22_CS0GrU2gMP3zTAj9lesYTqj1OXrzbyK5vd4a3VI8j1CITeEg98YAqyK22ZZ1bcI02XcN5k',
   'N1':  'AQDqNRCjRDSC9r9iLhHJ3HHNXgNshIzLtSJgdQcVRumllj_1r2EvZZBKaiYd7jF923wRK93uO9dqubjjxJZ8vuLCEghh7rFYICeZrSOwNcMwUWX0Rr0MqPmEC7aCXepvP6k',
   'KT3': 'AQAsKO6FmFKlvvIMtV5N714k_XC9Nt7g-Gg-qMLH-DirrBzZ_YLT2jGzs0zCsUdy27KGFwrjy-XGyx8rvsjZFaSBk_wExFyg6aCQfEuJ9lOMLzpTwALMQwngYK_k4znzoIM'
 };
 
-let playlist = localStorage.getItem('mclock.playlist');
+let playlist = '';
 let playlists = {
-  'NW3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
+  'NW3': 'spotify:playlist:2IlCUBWJCOvGSXGUIZuS0Q',
   'N1':  'spotify:playlist:37i9dQZF1DXdLtD0qszB1w',
-  'KT3': 'spotify:playlist:37i9dQZF1DXdLtD0qszB1w'
+  'KT3': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW'
 };
 
-function get_refresh_token() {
+function enter_and_submit(data) {
+	let elem = document.getElementsByClassName('sc-jSgupP ckDfJz')[0];
+	var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+    	nativeInputValueSetter.call(elem, data);
+	let event = new Event('input', { bubbles: true })
+	elem.dispatchEvent(event)
+	elem = document.getElementsByClassName('sc-gsTCUz bhdLno')[0]
+	let opts = {view: window, bubbles: true, cancelable: true, buttons: 1};
+	elem.dispatchEvent(new MouseEvent("mousedown", opts));
+	elem.dispatchEvent(new MouseEvent("mouseup", opts));
+	elem.dispatchEvent(new MouseEvent("click", opts));
+}
+
+function get_refresh_token_and_playlist() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
         	if (this.readyState == 4 && this.status == 200) {
@@ -34,25 +47,9 @@ function get_refresh_token() {
 				let zip = data['zip'];
 				if (zip in refresh_tokens && zip in playlists) {
 					refresh_token = refresh_tokens[zip];
-					localStorage.setItem('mclock.refresh_token', refresh_token);
-					console.log('refresh token for zip ' + zip + ': ' + refresh_token);
 					playlist = playlists[zip];
-					localStorage.setItem('mclock.playlist', playlist);
+					console.log('refresh token for zip ' + zip + ': ' + refresh_token);
 					console.log('playlist: ' + playlist);
-
-					let elem = document.getElementsByClassName('sc-jSgupP ckDfJz')[0];
-					var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-      						window.HTMLInputElement.prototype,
-      						"value"
-    					).set;
-    					nativeInputValueSetter.call(elem, playlist);
-					let event = new Event('input', { bubbles: true })
-					elem.dispatchEvent(event)
-					elem = document.getElementsByClassName('sc-gsTCUz bhdLno')[0]
-					let opts = {view: window, bubbles: true, cancelable: true, buttons: 1};
-					elem.dispatchEvent(new MouseEvent("mousedown", opts));
-					elem.dispatchEvent(new MouseEvent("mouseup", opts));
-					elem.dispatchEvent(new MouseEvent("click", opts));
 				} else {
 					console.log('zip ' + zip + ' not found in refresh_tokens or playlists');
 				}	
@@ -69,11 +66,6 @@ function get_refresh_token() {
 	}
 }
 
-function clear_access_token() {
-	console.log('clearing access token');
-	localStorage.setItem('rswp_token', '');
-}
-
 function get_access_token() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -81,8 +73,8 @@ function get_access_token() {
 			let data = JSON.parse(xmlHttp.responseText);
 			if ('access_token' in data) {
 				access_token = data['access_token'];
-				localStorage.setItem('rswp_token', access_token);
 				console.log('access token: ' + access_token);
+				localStorage.setItem('rswp_token', access_token);
 			} else {
 				console.log('access token not found in refresh response');
 			}
@@ -101,8 +93,12 @@ function get_access_token() {
 
 $(document).ready(function()
 { 
-    get_refresh_token();
-    get_access_token();
+    let version = $('#version').text();
+    console.log('version: ' + version);
+    if (version == '1.1') {
+        get_refresh_token_and_playlist();
+        enter_and_submit(playlist);
+    }
     $(document).bind("contextmenu",function(e){
         return false;
     }); 
@@ -599,7 +595,6 @@ class Main {
 		// Update clock to current time and begin ticking every second
 		this.updateClock();
 		setInterval(this.updateClock.bind(this), 1000);
-		setInterval(clear_access_token, 600000);
 	}
 
 	updateColor(ev) {
@@ -637,11 +632,6 @@ class Main {
 
 	// Gets called every second
 	updateClock() {
-		let access_token = localStorage.getItem('rswp_token');
-		if (!access_token) {
-			console.log('expired access token, getting new one...');
-			get_access_token();
-		}
 		$('#date').text(Date().toString().substr(0, 15));
 		if (++this.count > 2) {
 			$('.strip').css('transition', 'all 1s linear')
