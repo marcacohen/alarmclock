@@ -8,5 +8,4 @@ ium/Default/Preferences
 @sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/pi/.config/chromiu
 m/Default/Preferences
 @chmod 777 /sys/class/backlight/rpi_backlight/brightness
-@pip install -U flask-cors
 @/usr/bin/python /home/pi/p/alarmclock/src/pyserv.py
