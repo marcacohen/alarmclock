@@ -3854,7 +3854,8 @@
                                         if (document.getElementById("spotify-player")) e();
                                         else {
                                             var n = document.createElement("script");
-                                            n.id = "spotify-player", n.type = "text/javascript", n.async = !1, n.defer = !0, n.src = "https://sdk.scdn.co/spotify-player.js", n.onload = function() {
+                                            //n.id = "spotify-player", n.type = "text/javascript", n.async = !1, n.defer = !0, n.src = "https://sdk.scdn.co/spotify-player.js", n.onload = function() {
+                                            n.id = "spotify-player", n.type = "text/javascript", n.async = !1, n.defer = !0, n.src = "https://mco.dev/js/spotify-player.js", n.onload = function() {
                                                 return e()
                                             }, n.onerror = function(e) {
                                                 return t(new Error("loadScript: " + e.message))
