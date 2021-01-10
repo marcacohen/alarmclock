@@ -2292,7 +2292,7 @@
                         onChange: this.handleChangeSlider,
                         y: 100 * n,
                         yMin: 0,
-                        yMax: 100
+                        yMax: 10
                     })), r.createElement("button", {
                         type: "button",
                         onClick: t ? void 0 : this.handleClick
