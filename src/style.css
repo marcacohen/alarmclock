@@ -1,3 +1,9 @@
+#root h1 {
+  display: none;
+}
+#root form {
+  display: none;
+}
 .viewport,
 .viewport .clock,
 .viewport .buttons,
