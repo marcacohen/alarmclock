@@ -6,8 +6,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "test": "electron ./dist",
+    "dist": "electron-builder -l --arm64",
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
@@ -16,9 +15,12 @@
     },
     "electronVersion": "11.1.1-wvvmp",
     "appId": "your.id",
-    "mac": {
-      "category": "clock"
-    }
+    "mac": { },
+    "linux": {
+      "target": "deb",
+      "maintainer": "marcacohen@gmail.com"
+    },
+    "afterPack": "./sign.js"
   },
   "repository": "https://github.com/marcacohen/alarmclock",
   "author": "mco",
