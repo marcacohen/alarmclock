@@ -1,0 +1,32 @@
+{
+  "name": "alarmclock",
+  "version": "1.0.0",
+  "description": "Marc's Alarm Clock",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "test": "electron ./dist",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "electronDownload": {
+      "mirror": "https://github.com/castlabs/electron-releases/releases/download/v"
+    },
+    "electronVersion": "11.1.1-wvvmp",
+    "appId": "your.id",
+    "mac": {
+      "category": "clock"
+    }
+  },
+  "repository": "https://github.com/marcacohen/alarmclock",
+  "author": "mco",
+  "license": "Apache 2.0",
+  "devDependencies": {
+    "electron": "git+https://github.com/castlabs/electron-releases.git#v11.1.1-wvvmp",
+    "electron-builder": "^22.9.1"
+  },
+  "dependencies": {
+  }
+}

@@ -3855,7 +3855,7 @@
                                         else {
                                             var n = document.createElement("script");
                                             //n.id = "spotify-player", n.type = "text/javascript", n.async = !1, n.defer = !0, n.src = "https://sdk.scdn.co/spotify-player.js", n.onload = function() {
-                                            n.id = "spotify-player", n.type = "text/javascript", n.async = !1, n.defer = !0, n.src = "https://mco.dev/spotify/spotify-player.js", n.onload = function() {
+                                            n.id = "spotify-player", n.type = "text/javascript", n.async = !1, n.defer = !0, n.src = "http://localhost:8000/spotify-player.js", n.onload = function() {
                                                 return e()
                                             }, n.onerror = function(e) {
                                                 return t(new Error("loadScript: " + e.message))
