@@ -2203,7 +2203,7 @@
                 "> button": {
                     fontSize: N(26)
                 },
-                "@media (max-width: 1023px)": {
+                "@media (max-width: 0px)": {
                     display: "none"
                 }
             }, (function(e) {
