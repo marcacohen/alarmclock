@@ -3820,7 +3820,7 @@
                         progressMs: 0,
                         status: D.IDLE,
                         track: a.emptyTrack,
-                        volume: W(t.initialVolume) || 1
+                        volume: .25 // W(t.initialVolume) || 1
                     }, a.styles = (n = t.styles, P({
                         activeColor: "#1cb954",
                         altColor: "#ccc",
