@@ -105,6 +105,8 @@ function update_player_state() {
 
 $(document).ready(function()
 { 
+    $('.sc-hKgILt gTLZXx').css('display: none');
+    $('.sc-eCssSg hmocIu').css('display: none');
     let version = $('#version').text();
     console.log('version: ' + version);
     if (version == '1.1') {
