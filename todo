@@ -12,6 +12,7 @@ X sleep timer
 X interval timer
 X spotify streaming!
 X add random play function
+- save chrome local storage across docker run sessions
 
 future
 - bug: snooze updates alarm setting
