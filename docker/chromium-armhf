@@ -12,7 +12,7 @@ echo "Found and using ${DOCKER_IMAGE_ID}"
 
 # -e PULSE_COOKIE_DATA=`pax11publish -d | grep --color=never -Po '(?<=^Cookie: ).*'` \
 # --platform linux/armhf
-docker run -rm --privileged \
+docker run --rm --privileged \
  --network host \
  -e DISPLAY=unix$DISPLAY \
  -e PULSE_SERVER=tcp:${addrip}:4713 \
