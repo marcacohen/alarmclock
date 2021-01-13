@@ -1,1 +1,1 @@
-sudo docker build -t hthiemann/chromium-armhf .
+sudo docker build -t marcacohen/chromium-armhf .
