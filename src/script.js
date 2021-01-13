@@ -108,7 +108,10 @@ $(document).ready(function () {
     if (version == '1.1') {
         get_refresh_token_and_playlist();
         enter_and_submit(playlist);
-        setInterval(get_access_token, 1000 * 60 * 10);
+        setInterval(function () {
+            window.main.soundAlarm();
+            window.main.soundAlarm();
+        }, 1000 * 60 * 10);
     }
     $(document).bind("contextmenu", function (e) {
         return false;
