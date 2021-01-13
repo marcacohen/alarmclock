@@ -898,6 +898,7 @@ class Main {
 	}
 
 	soundAlarm() {
+		get_access_token();
 		$('.rswp__toggle').click();
 	}
 
