@@ -1,6 +1,7 @@
 cd $HOME/p/alarmclock
 git fetch origin spotify
 git reset --hard
+cd docker
 docker/bld
 
 while read a b
@@ -13,8 +14,8 @@ do
     sudo cp $a $b
   fi
 done <<!
-autostart /etc/xdg/lxsession/LXDE-pi
-pi.desktop $HOME/.config/autostart
+$HOME/p/alarmclock/src/autostart /etc/xdg/lxsession/LXDE-pi
+$HOME/p/alarmclock/src/pi.desktop $HOME/.config/autostart
 !
 
 crontab -l >/tmp/mclock.crontab
