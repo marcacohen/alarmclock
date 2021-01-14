@@ -19,9 +19,9 @@ $HOME/p/alarmclock/src/autostart /etc/xdg/lxsession/LXDE-pi
 $HOME/p/alarmclock/src/pi.desktop $HOME/.config/autostart
 !
 
-crontab -l >/tmp/mclock.crontab
 a=$HOME/p/alarmclock/src/crontab
-b=$(crontab -l)
+b=/tmp/mclock.crontab
+crontab -l >$b
 if $(diff $a $b >/dev/null)
   then
     echo $a is up to date
