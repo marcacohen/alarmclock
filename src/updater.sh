@@ -2,7 +2,8 @@ cd $HOME/p/alarmclock
 git fetch origin spotify
 git reset --hard
 cd docker
-docker/bld
+./bld
+cd ..
 
 while read a b
 do
@@ -29,4 +30,4 @@ if $(diff $a $b >/dev/null)
     crontab -r
     crontab $a
   fi
-done <<!
+done
