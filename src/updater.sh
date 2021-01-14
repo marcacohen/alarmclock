@@ -1,6 +1,6 @@
 cd $HOME/p/alarmclock
 git fetch origin spotify
-git reset --hard
+git reset --hard spotify
 cd docker
 ./bld
 cd ..
