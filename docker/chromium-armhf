@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
 echo "Set host IP for Pulseaudio"
-addrip="$(docker network inspect bridge --format='{{(index .IPAM.Config 0).Gateway}}')"
+addrip="$(sudo docker network inspect bridge --format='{{(index .IPAM.Config 0).Gateway}}')"
 
 echo "Enabling XHost Forwarding"
-xhost +local:docker
+sudo xhost +local:docker
 
 echo "Searching for Docker image ..."
-DOCKER_IMAGE_ID=$(docker images -q marcacohen/mclock | head -n 1)
+DOCKER_IMAGE_ID=$(sudo docker images -q marcacohen/mclock | head -n 1)
 echo "Found and using ${DOCKER_IMAGE_ID}"
 
 # -e PULSE_COOKIE_DATA=`pax11publish -d | grep --color=never -Po '(?<=^Cookie: ).*'` \
 # --platform linux/armhf
-docker run --rm --privileged \
+sudo docker run --rm --privileged \
  --network host \
  -e DISPLAY=unix$DISPLAY \
  -e PULSE_SERVER=tcp:${addrip}:4713 \
