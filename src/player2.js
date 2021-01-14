@@ -1562,7 +1562,7 @@
                     "> div": (t = {
                         backgroundColor: n.bgColor,
                         boxShadow: n.altColor ? "1px 1px 10px " + n.altColor : "none"
-                    }, t[n.p] = "120%", t.button = {
+                    }, t[n.p] = "320%", t.button = {
                         color: n.c
                     }, t)
                 }
@@ -2033,7 +2033,7 @@
                                     }),
                                     trackY: fe(fe({}, r), {
                                         height: "100%",
-                                        minHeight: "50px",
+                                        minHeight: "100px",
                                         width: t.width
                                     })
                                 };
@@ -2215,7 +2215,7 @@
                     "> div": (t = {
                         backgroundColor: n.bgColor,
                         boxShadow: n.altColor ? "1px 1px 10px " + n.altColor : "none"
-                    }, t[n.p] = "120%", t)
+                    }, t[n.p] = "320%", t)
                 }
             }), "VolumeRSWP"),
             xe = function(e) {
