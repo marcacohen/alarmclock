@@ -3,9 +3,6 @@
 @xset -dpms
 @xset s off
 @xset s noblank
-@sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/pi/.config/chrom
-ium/Default/Preferences
-@sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/pi/.config/chromiu
-m/Default/Preferences
+@sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/pi/.config/chromium/Default/Preferences
+@sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/pi/.config/chromium/Default/Preferences
 @chmod 777 /sys/class/backlight/rpi_backlight/brightness
-@/usr/bin/python /home/pi/p/alarmclock/src/pyserv.py
