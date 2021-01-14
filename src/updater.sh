@@ -23,11 +23,10 @@ a=$HOME/p/alarmclock/src/crontab
 b=/tmp/mclock.crontab
 crontab -l >$b
 if $(diff $a $b >/dev/null)
-  then
-    echo $a is up to date
-  else
-    echo installing new version of $a
-    crontab -r
-    crontab $a
-  fi
-done
+then
+  echo $a is up to date
+else
+  echo installing new version of $a
+  crontab -r
+  crontab $a
+fi
