@@ -1,4 +1,5 @@
 cd $HOME/p/alarmclock
+git stash
 git pull
 cd docker
 ./bld
