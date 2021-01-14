@@ -108,10 +108,6 @@ $(document).ready(function () {
     if (version == '1.1') {
         get_refresh_token_and_playlist();
         enter_and_submit(playlist);
-        setInterval(function () {
-            $('.rswp__toggle').click();
-            $('.rswp__toggle').click();
-        }, 1000 * 60 * 10);
     }
     $(document).bind("contextmenu", function (e) {
         return false;
@@ -782,7 +778,7 @@ var Main = /** @class */ (function () {
     };
     Main.prototype.soundAlarm = function () {
         get_access_token();
-        $('.rswp__toggle').click();
+        $('#rswp__play').click();
     };
     Main.prototype.timerEnable = function () {
         this.timerEnabled = !this.timerEnabled;

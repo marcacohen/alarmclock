@@ -2487,15 +2487,18 @@
                 }
             }, r.createElement("div", null, (!!u.length || t) && r.createElement("button", {
                 type: "button",
+                id: "rswp__prev",
                 onClick: o,
                 "aria-label": "Previous Track"
             }, r.createElement(Me, null))), r.createElement("div", null, r.createElement("button", {
                 type: "button",
+                id: "rswp__play",
                 className: "rswp__toggle",
                 onClick: i,
                 "aria-label": n ? "Pause" : "Play"
             }, n ? r.createElement(Ie, null) : r.createElement(ze, null))), r.createElement("div", null, (!!l.length || t) && r.createElement("button", {
                 type: "button",
+                id: "rswp__next",
                 onClick: a,
                 "aria-label": "Next Track"
             }, r.createElement(Re, null))))
