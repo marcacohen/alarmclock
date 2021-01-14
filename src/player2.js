@@ -1562,7 +1562,7 @@
                     "> div": (t = {
                         backgroundColor: n.bgColor,
                         boxShadow: n.altColor ? "1px 1px 10px " + n.altColor : "none"
-                    }, t[n.p] = "320%", t.button = {
+                    }, t[n.p] = "250%", t.button = {
                         color: n.c
                     }, t)
                 }
@@ -2215,7 +2215,7 @@
                     "> div": (t = {
                         backgroundColor: n.bgColor,
                         boxShadow: n.altColor ? "1px 1px 10px " + n.altColor : "none"
-                    }, t[n.p] = "320%", t)
+                    }, t[n.p] = "250%", t)
                 }
             }), "VolumeRSWP"),
             xe = function(e) {
