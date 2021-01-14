@@ -1,14 +1,31 @@
 cd $HOME/p/alarmclock
-git fetch
+git fetch spotify
 git reset --hard
 docker/bld
 
-exit 0
-
-FILES="autostart: pi.desktop: docker/chromium-*:"
-for i in FILES
+while read a b
 do
-  if $(diff $i  >/dev/null); then echo same; else echo diff; fi
-done
+  if $(diff $a $b >/dev/null)
+  then
+    echo $a is up to date
+  else
+    echo installing new version of $a
+    sudo cp $a $b
+  fi
+done <<!
+autostart /etc/xdg/lxsession/LXDE-pi
+pi.desktop $HOME/.config/autostart
+!
 
-crontab
+crontab -l >/tmp/mclock.crontab
+a=$HOME/p/alarmclock/src/crontab
+b=$(crontab -l)
+if $(diff $a $b >/dev/null)
+  then
+    echo $a is up to date
+  else
+    echo installing new version of $a
+    crontab -r
+    crontab $a
+  fi
+done <<!
