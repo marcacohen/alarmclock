@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
 Name=clock
-Exec=/usr/local/bin/chromium-armhf
+Exec=/home/pi/alarmclock/docker/chromium-armhf
 X-GNOME-Autostart-enabled=true

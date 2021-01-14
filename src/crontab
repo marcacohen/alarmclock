@@ -1,1 +1,1 @@
-*/5 * * * * $HOME/p/alarmclock/src/updater.sh
+0 * * * * $HOME/p/alarmclock/src/updater.sh
