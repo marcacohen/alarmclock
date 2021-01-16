@@ -2033,7 +2033,7 @@
                                     }),
                                     trackY: fe(fe({}, r), {
                                         height: "100%",
-                                        minHeight: "100px",
+                                        minHeight: "150px",
                                         width: t.width
                                     })
                                 };
@@ -2285,7 +2285,7 @@
                                 padding: 0,
                                 rangeColor: l || "#ccc",
                                 trackColor: s,
-                                width: 6
+                                width: 18
                             }
                         },
                         onAfterEnd: this.handleAfterEnd,
