@@ -777,7 +777,6 @@ var Main = /** @class */ (function () {
         }
     };
     Main.prototype.soundAlarm = function () {
-        get_access_token();
         $('#rswp__play').click();
     };
     Main.prototype.timerEnable = function () {

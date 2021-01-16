@@ -3729,6 +3729,7 @@
                             }))
                         }))
                     }, a.togglePlay = function(e) {
+                        console.log('togglePlay');
                         return void 0 === e && (e = !1), ut(a, void 0, void 0, (function() {
                             var t, n, r, a, o, i, l, u, s, c, p, h, v = this;
                             return st(this, (function(y) {
