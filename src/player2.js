@@ -1172,8 +1172,11 @@
                         },
                         method: "GET"
                     }).then((function(e) {
+                        console.log('device return:', e);
                         return e.json()
-                    }))]
+                    })).catch((error) => {
+                        console.error('Error:', error);
+                    })]
                 }))
             }))
         }
@@ -3607,22 +3610,21 @@
                             getOAuthToken: function(e) {
                                 //e(r)
 				console.log('refreshing access token from player');
-				get_access_token();
-				e(access_token);
+				get_access_token(e);
                             },
                             name: n,
                             volume: e
                         }), a.player.addListener("ready", a.handlePlayerStatus), a.player.addListener("not_ready", a.handlePlayerStatus), a.player.addListener("player_state_changed", a.handlePlayerStateChanges), a.player.addListener("initialization_error", (function(e) {
-                            console.log("init error", e.message);
+                            console.error("init error", e.message);
                             return a.handlePlayerErrors("initialization_error", e.message)
                         })), a.player.addListener("authentication_error", (function(e) {
-                            console.log("auth error", e.message);
+                            console.error("auth error", e.message);
                             return a.handlePlayerErrors("authentication_error", e.message)
                         })), a.player.addListener("account_error", (function(e) {
-                            console.log("acct error", e.message);
+                            console.error("acct error", e.message);
                             return a.handlePlayerErrors("account_error", e.message)
                         })), a.player.addListener("playback_error", (function(e) {
-                            console.log("play error", e.message);
+                            console.error("play error", e.message);
                             return a.handlePlayerErrors("playback_error", e.message)
                         })), a.player.connect()
                     }, a.setAlbumImage = function(e) {

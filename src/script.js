@@ -7,7 +7,6 @@
  * to that but add some extra methods for exporting and
  * importing it to and from 12/hour format
 */
-var access_token = '';
 var refresh_token = '';
 var refresh_tokens = {
     'NW3': 'AQBMSznXPzgILC05wR1QcaKoANYK8yMTzAPgxCQxIazw6Xfj05v21AkmXg22_CS0GrU2gMP3zTAj9lesYTqj1OXrzbyK5vd4a3VI8j1CITeEg98YAqyK22ZZ1bcI02XcN5k',
@@ -63,32 +62,35 @@ function get_refresh_token_and_playlist() {
         console.log('error sending geoip request');
     }
 }
-function get_access_token() {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var data = JSON.parse(xmlHttp.responseText);
+function get_access_token(callback) {
+    var access_token = '';
+    var auth_str = 'Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI';
+    var body = 'grant_type=refresh_token&refresh_token=' + refresh_token;
+    var url = 'https://accounts.spotify.com/api/token';
+    $.ajax(url, {
+        type: 'POST',
+        data: body,
+        dataType: 'json',
+        asynch: false,
+        headers: {
+            'Authorization': auth_str,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        success: function (data, status, xhr) {
             if ('access_token' in data) {
                 access_token = data['access_token'];
                 console.log('access token: ' + access_token);
                 localStorage.setItem('rswp_token', access_token);
+                callback(access_token);
             }
             else {
                 console.log('access token not found in refresh response');
             }
+        },
+        error: function (data, stastus, xhr) {
+            console.log('error sending refresh request');
         }
-        ;
-    };
-    xmlHttp.open('POST', 'https://accounts.spotify.com/api/token', false);
-    xmlHttp.setRequestHeader('Authorization', 'Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI');
-    xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var body = 'grant_type=refresh_token&refresh_token=' + refresh_token;
-    try {
-        xmlHttp.send(body);
-    }
-    catch (_a) {
-        console.log('error sending refresh request');
-    }
+    });
 }
 function update_player_state() {
     var m = window.main;
