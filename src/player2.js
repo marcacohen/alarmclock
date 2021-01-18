@@ -3386,9 +3386,9 @@
                             }))
                         }))
                     }, a.handleClickTogglePlay = function() {
-			update_player_state();
                         return ut(a, void 0, void 0, (function() {
                             var e, t;
+                            update_player_state(this.state.currentDeviceId, this.props.token);
                             return st(this, (function(n) {
                                 switch (n.label) {
                                     case 0:
