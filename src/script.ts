@@ -100,6 +100,7 @@ async function get_access_token(callback) {
 }
 
 function update_player_state() {
+	console.log('player state update');
 	let m = window.main;
 	if(m.alarmPlaying) {
 		m.alarmPlaying = false;
