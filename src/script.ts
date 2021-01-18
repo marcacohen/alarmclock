@@ -19,7 +19,7 @@ let refresh_tokens = {
 
 let playlist = '';
 let playlists = {
-  'NW3': 'spotify:playlist:2IlCUBWJCOvGSXGUIZuS0Q',
+  'NW3': 'spotify:playlist:3o3goJjfPyyIYdkYOO9ET0',
   'N7':  'spotify:playlist:3LeuIBk2eYwgu8fdCwBOfo',
   'KT3': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW'
 };
