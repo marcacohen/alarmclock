@@ -90,7 +90,7 @@ async function get_access_token(callback) {
 		console.log('error sending refresh request');
 	    }
         });
-        while (!access_token) {
+        for (let i = 0; i < 20 && !access_token; i++) {
            console.log('waiting for access token...');
            await new Promise(r => setTimeout(r, 100));
         }
@@ -117,6 +117,7 @@ function enable_shuffle(device_id) {
             success: function (data, status, xhr) {
                 console.log('shuffle set');
                 shuffle = true;
+		$('#rswp__next').click();
             },
             error: function(data, stastus, xhr) {
 		console.log('error enabling shuffle');
