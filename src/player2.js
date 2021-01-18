@@ -1230,14 +1230,7 @@
                         offset: {
                             position: o
                         }
-                    })), fetch("https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=" + r, {
-                        headers: {
-                            Authorization: "Bearer " + e,
-                            "Accept": "application/json",
-                            "Content-Type": "application/json"
-                        },
-                        method: "PUT"
-                    }), [2, fetch("https://api.spotify.com/v1/me/player/play?device_id=" + r, {
+                    })), [2, fetch("https://api.spotify.com/v1/me/player/play?device_id=" + r, {
                         body: t,
                         headers: {
                             Authorization: "Bearer " + e,
