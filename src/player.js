@@ -186,6 +186,9 @@
                         }), []), Object(o.useCallback)((function(n) {
                             var t = n.type,
                                 e = Object(s.a)(n, ["type"]);
+                            if (t == 'player_update') {
+                              window.enable_shuffle(e.currentDeviceId);
+                            }
                             console.group("RSWP: ".concat(t)), console.log(e), console.groupEnd(), j(e.isPlaying), e.status === u.a.ERROR && "authentication_error" === e.errorType && (localStorage.removeItem("rswp_token"), b(""))
                         }), []));
                     return Object(r.jsxs)("div", {

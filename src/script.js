@@ -16,6 +16,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
  * to that but add some extra methods for exporting and
  * importing it to and from 12/hour format
 */
+let access_token = '';
 let refresh_token = '';
 let refresh_tokens = {
     'NW3': 'AQBMSznXPzgILC05wR1QcaKoANYK8yMTzAPgxCQxIazw6Xfj05v21AkmXg22_CS0GrU2gMP3zTAj9lesYTqj1OXrzbyK5vd4a3VI8j1CITeEg98YAqyK22ZZ1bcI02XcN5k',
@@ -73,7 +74,6 @@ function get_refresh_token_and_playlist() {
 }
 function get_access_token(callback) {
     return __awaiter(this, void 0, void 0, function* () {
-        let access_token = '';
         let auth_str = 'Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI';
         let body = 'grant_type=refresh_token&refresh_token=' + refresh_token;
         let url = 'https://accounts.spotify.com/api/token';
@@ -107,15 +107,30 @@ function get_access_token(callback) {
         callback(access_token);
     });
 }
-function update_player_state(device_id, access_token) {
-    console.log('player state update');
-    fetch("https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=" + device_id, {
+let shuffle = false;
+function enable_shuffle(device_id) {
+    console.log('enable shuffle');
+    if (shuffle) {
+        return;
+    }
+    let url = 'https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=' + device_id;
+    $.ajax(url, {
+        type: 'PUT',
         headers: {
-            Authorization: "Bearer " + access_token,
-            "Content-Type": "application/json"
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json'
         },
-        method: "PUT"
+        success: function (data, status, xhr) {
+            console.log('shuffle set');
+            shuffle = true;
+        },
+        error: function (data, stastus, xhr) {
+            console.log('error enabling shuffle');
+        }
     });
+}
+function update_player_state() {
+    console.log('player state update');
     let m = window.main;
     if (m.alarmPlaying) {
         m.alarmPlaying = false;

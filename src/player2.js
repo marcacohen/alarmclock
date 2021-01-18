@@ -3388,7 +3388,7 @@
                     }, a.handleClickTogglePlay = function() {
                         return ut(a, void 0, void 0, (function() {
                             var e, t;
-                            update_player_state(this.state.currentDeviceId, this.props.token);
+                            update_player_state();
                             return st(this, (function(n) {
                                 switch (n.label) {
                                     case 0:
