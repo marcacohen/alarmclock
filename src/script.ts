@@ -91,9 +91,10 @@ async function get_access_token(callback) {
 	    }
         });
         while (!access_token) {
-           await new Promise(r => setTimeout(r, 200));
+           console.log('waiting for access token...');
+           await new Promise(r => setTimeout(r, 100));
         }
-        console.log('access token: ' + access_token);
+        console.log('got new access token: ' + access_token);
         localStorage.setItem('rswp_token', access_token);
         callback(access_token);
 }
