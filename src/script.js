@@ -107,8 +107,7 @@ function get_access_token(callback) {
         callback(access_token);
     });
 }
-function update_player_state(device_id, access_token) {
-    console.log('player state update');
+function enable_shuffle(device_id, access_token) {
     fetch("https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=" + device_id, {
         headers: {
             Authorization: "Bearer " + access_token,
@@ -116,6 +115,9 @@ function update_player_state(device_id, access_token) {
         },
         method: "PUT"
     });
+}
+function update_player_state() {
+    console.log('player state update');
     let m = window.main;
     if (m.alarmPlaying) {
         m.alarmPlaying = false;
