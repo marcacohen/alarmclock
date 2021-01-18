@@ -65,7 +65,7 @@ function get_refresh_token_and_playlist() {
 	}
 }
 
-function get_access_token(callback) {
+async function get_access_token(callback) {
         let access_token = '';
         let auth_str = 'Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI';
 	let body = 'grant_type=refresh_token&refresh_token=' + refresh_token;
@@ -74,17 +74,14 @@ function get_access_token(callback) {
             type: 'POST',
             data: body,
             dataType: 'json',
-            asynch: false,
             headers: {
 	        'Authorization': auth_str,
 	        'Content-Type': 'application/x-www-form-urlencoded'
             },
             success: function (data, status, xhr) {
                 if ('access_token' in data) {
+                    console.log('access token found in refresh response');
                     access_token = data['access_token'];
-                    console.log('access token: ' + access_token);
-                    localStorage.setItem('rswp_token', access_token);
-                    callback(access_token);
                 } else {
                     console.log('access token not found in refresh response');
                 }
@@ -93,6 +90,12 @@ function get_access_token(callback) {
 		console.log('error sending refresh request');
 	    }
         });
+        while (!access_token) {
+           await new Promise(r => setTimeout(r, 200));
+        }
+        console.log('access token: ' + access_token);
+        localStorage.setItem('rswp_token', access_token);
+        callback(access_token);
 }
 
 function update_player_state() {
