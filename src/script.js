@@ -109,25 +109,33 @@ function get_access_token(callback) {
 }
 let shuffle = false;
 function enable_shuffle(device_id) {
-    console.log('enable shuffle');
-    if (shuffle) {
-        return;
-    }
-    let url = 'https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=' + device_id;
-    $.ajax(url, {
-        type: 'PUT',
-        headers: {
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json'
-        },
-        success: function (data, status, xhr) {
-            console.log('shuffle set');
-            shuffle = true;
-            $('#rswp__next').click();
-        },
-        error: function (data, stastus, xhr) {
-            console.log('error enabling shuffle');
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log('enable shuffle');
+        if (shuffle) {
+            console.log('shuffle already enabled');
+            return;
         }
+        shuffle = true;
+        yield new Promise(r => setTimeout(r, 100));
+        let url = 'https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=' + device_id;
+        $.ajax(url, {
+            type: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            success: function (data, status, xhr) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    console.log('shuffle set');
+                    yield new Promise(r => setTimeout(r, 200));
+                    $('#rswp__next').click();
+                });
+            },
+            error: function (data, stastus, xhr) {
+                shuffle = false;
+                console.log('error enabling shuffle');
+            }
+        });
     });
 }
 function update_player_state() {

@@ -101,12 +101,14 @@ async function get_access_token(callback) {
 
 let shuffle = false;
 
-function enable_shuffle(device_id) {
+async function enable_shuffle(device_id) {
 	console.log('enable shuffle');
         if (shuffle) {
+            console.log('shuffle already enabled');
             return;
         }
-            
+        shuffle = true;
+        await new Promise(r => setTimeout(r, 100));
         let url = 'https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=' + device_id;
         $.ajax(url, {
             type: 'PUT',
@@ -114,12 +116,13 @@ function enable_shuffle(device_id) {
                 'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json'
             },
-            success: function (data, status, xhr) {
+            success: async function (data, status, xhr) {
                 console.log('shuffle set');
-                shuffle = true;
+                await new Promise(r => setTimeout(r, 200));
 		$('#rswp__next').click();
             },
             error: function(data, stastus, xhr) {
+                shuffle = false;
 		console.log('error enabling shuffle');
 	    }
         });
