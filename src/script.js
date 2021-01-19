@@ -167,7 +167,7 @@ $(document).ready(function () {
             console.log('reloading...');
             window.location.reload();
         }
-    }, 5000); //3600000);
+    }, 3600000);
 });
 class Time {
     // A date object can be provided if desired to give a preset time
