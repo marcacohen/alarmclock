@@ -141,8 +141,7 @@ function update_player_state() {
 	}
 }
 
-$(document).ready(function()
-{ 
+$(document).ready(function() {
     let version = $('#version').text();
     console.log('version: ' + version);
     if (version == '1.1') {
@@ -152,6 +151,10 @@ $(document).ready(function()
     $(document).bind("contextmenu",function(e){
         return false;
     }); 
+    setInterval(() => {
+        console.log('reloading...');
+        window.location.reload()
+    }, 3600000);
 });
 
 // Required interface for 12 hour import/export format
@@ -574,7 +577,8 @@ class Main {
 			this.timer.time24.minutes = parseInt(tminutes);
 		}
 
-        	this.alarmMode = false;
+		this.alarmMode = false;
+
 		let hr24Mode = localStorage.getItem('mclock.hr24Mode') == 'true';
 		if (hr24Mode != this.clock.hr24Mode) {
 			this.toggle24hrMode();
@@ -615,8 +619,17 @@ class Main {
 
         this.alarmEnabled = false;
         $(".alarm-enable").click(this.alarmEnable.bind(this));
+	let alarmEnabled = localStorage.getItem('mclock.alarm.enabled');
+	if (alarmEnabled && alarmEnabled == 'true') {
+		this.alarmEnable();
+	}
+
         this.timerEnabled = false;
         $(".timer-enable").click(this.timerEnable.bind(this));
+	let timerEnabled = localStorage.getItem('mclock.timer.enabled');
+	if (timerEnabled && timerEnabled == 'true') {
+		this.timerEnable();
+	}
 
         this.alarmSleepActivated = false;
         this.countdownTimerActivated = false;
@@ -684,10 +697,6 @@ class Main {
 				var startTime = this.timer.startTime;
 				var secondsToWait = this.timer.secondsToWait;
 				var currentSeconds = Math.floor(this.clock.time24.date.getTime() / 1000)
-				//console.log('startTime:', startTime);
-				//console.log('secondsToWait:', secondsToWait);
-				//console.log('currentSeconds:', currentSeconds);
-
 				if (startTime + secondsToWait < currentSeconds) {
 					this.soundAlarm();
 					this.timerEnable();
@@ -941,6 +950,7 @@ class Main {
 
 	timerEnable() {
 		this.timerEnabled = !this.timerEnabled;
+                localStorage.setItem('mclock.timer.enabled', this.timerEnabled.toString());
 		if(this.timerEnabled) {
 			$(".timer-enable").prop("checked", true);
 			this.timer.startTime = Math.floor(this.clock.time24.date.getTime() / 1000);
@@ -953,14 +963,15 @@ class Main {
 	alarmEnable()
 	{
 		this.alarmEnabled = !this.alarmEnabled;
+                localStorage.setItem('mclock.alarm.enabled', this.alarmEnabled.toString());
 
 		if(this.alarmEnabled)
 		{
-			$(".alarm-enable").addClass("toggled");
+			$(".alarm-enable").prop("checked", true);
 		}
 		else
 		{
-			$(".alarm-enable").removeClass("toggled");
+			$(".alarm-enable").prop("checked", false);
 
 			// Disable sleep mode in case it was activated
 			$(".alarm-snooze").removeClass("toggled");
