@@ -627,8 +627,11 @@ class Main {
         this.timerEnabled = false;
         $(".timer-enable").click(this.timerEnable.bind(this));
 	let timerEnabled = localStorage.getItem('mclock.timer.enabled');
-	if (timerEnabled && timerEnabled == 'true') {
-		this.timerEnable();
+	let fireTime = localStorage.getItem('mclock.timer.fireTime');
+	if (timerEnabled && timerEnabled == 'true' && fireTime) {
+		this.timer.fireTime = parseInt(fireTime);
+		this.timerEnabled = !this.timerEnabled;
+		$(".timer-enable").prop("checked", true);
 	}
 
         this.alarmSleepActivated = false;
@@ -955,11 +958,11 @@ class Main {
 			let currentTime = Math.floor(this.clock.time24.date.getTime() / 1000);
 			let secondsToWait = (this.timer.time24.hours * 3600) + (this.timer.time24.minutes * 60)
 			this.timer.fireTime = currentTime + secondsToWait;
-
 		} else {
 			$(".timer-enable").prop("checked", false);
 			this.timer.fireTime = 0
 		}
+		localStorage.setItem('mclock.timer.fireTime', this.timer.fireTime.toString());
 	}
 
 	alarmEnable()

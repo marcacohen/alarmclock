@@ -494,8 +494,11 @@ class Main {
         this.timerEnabled = false;
         $(".timer-enable").click(this.timerEnable.bind(this));
         let timerEnabled = localStorage.getItem('mclock.timer.enabled');
-        if (timerEnabled && timerEnabled == 'true') {
-            this.timerEnable();
+        let fireTime = localStorage.getItem('mclock.timer.fireTime');
+        if (timerEnabled && timerEnabled == 'true' && fireTime) {
+            this.timer.fireTime = parseInt(fireTime);
+            this.timerEnabled = !this.timerEnabled;
+            $(".timer-enable").prop("checked", true);
         }
         this.alarmSleepActivated = false;
         this.countdownTimerActivated = false;
@@ -800,6 +803,7 @@ class Main {
             $(".timer-enable").prop("checked", false);
             this.timer.fireTime = 0;
         }
+        localStorage.setItem('mclock.timer.fireTime', this.timer.fireTime.toString());
     }
     alarmEnable() {
         this.alarmEnabled = !this.alarmEnabled;
