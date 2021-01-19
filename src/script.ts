@@ -152,8 +152,11 @@ $(document).ready(function() {
         return false;
     }); 
     setInterval(() => {
-        console.log('reloading...');
-        window.location.reload()
+	let m = window.main;
+	if(!m.alarmPlaying) {
+            console.log('reloading...');
+            window.location.reload();
+        }
     }, 3600000);
 });
 
@@ -470,8 +473,6 @@ class Clock
 			localStorage.setItem('mclock.alarm.minutes', this.time24.minutes.toString());
 			localStorage.setItem('mclock.alarm.pm', this.time24.to12().pm.toString());
 		} else if (this.isTimer) {
-			this.secondsToWait = (this.time24.hours * 3600) + (this.time24.minutes * 60)
-			console.log(this.secondsToWait);
 			if (saveTimer) {
 				localStorage.setItem('mclock.timer.hours', this.time24.hours.toString());
 				localStorage.setItem('mclock.timer.minutes', this.time24.minutes.toString());
@@ -508,8 +509,7 @@ class Clock
 	time24: Time;
 	isAlarm: boolean;
 	isTimer: boolean;
-	secondsToWait: number;
-	startTime: number;
+	fireTime: number;
 }
 
 /*
@@ -694,10 +694,8 @@ class Main {
 		if (!this.timerMode)
 		{
 			if (this.timerEnabled) {
-				var startTime = this.timer.startTime;
-				var secondsToWait = this.timer.secondsToWait;
 				var currentSeconds = Math.floor(this.clock.time24.date.getTime() / 1000)
-				if (startTime + secondsToWait < currentSeconds) {
+				if (this.timer.fireTime < currentSeconds) {
 					this.soundAlarm();
 					this.timerEnable();
 				}
@@ -945,6 +943,7 @@ class Main {
 	}
 
 	soundAlarm() {
+                console.log('soundAlarm...');
 		$('#rswp__play').click();
 	}
 
@@ -953,10 +952,13 @@ class Main {
                 localStorage.setItem('mclock.timer.enabled', this.timerEnabled.toString());
 		if(this.timerEnabled) {
 			$(".timer-enable").prop("checked", true);
-			this.timer.startTime = Math.floor(this.clock.time24.date.getTime() / 1000);
+			let currentTime = Math.floor(this.clock.time24.date.getTime() / 1000);
+			let secondsToWait = (this.timer.time24.hours * 3600) + (this.timer.time24.minutes * 60)
+			this.timer.fireTime = currentTime + secondsToWait;
+
 		} else {
 			$(".timer-enable").prop("checked", false);
-			this.timer.startTime = 0
+			this.timer.fireTime = 0
 		}
 	}
 
