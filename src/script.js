@@ -161,7 +161,7 @@ $(document).ready(function () {
     $(document).bind("contextmenu", function (e) {
         return false;
     });
-    setTimeout(() => {
+    setInterval(() => {
         let m = window.main;
         if (!m.alarmPlaying) {
             console.log('reloading...');
