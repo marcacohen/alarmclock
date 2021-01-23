@@ -3162,7 +3162,7 @@
                         x: a,
                         xMin: 0,
                         xMax: 100,
-                        xStep: .1
+                        xStep: .05
                     }))
                 }, t
             }(r.PureComponent),
