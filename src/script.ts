@@ -588,6 +588,8 @@ class Main {
         this.enableAlarmFeatures();
 
         // Wireup some event handlers
+	$('#date').click(this.toggleCalendar.bind(this));
+	$('#calendar').click(this.toggleCalendar.bind(this));
 	$(".brightness").click(this.enableBrightness.bind(this));
 	this.brightness = document.querySelector("#brightness");
 	this.brightness.value = brightness;
@@ -661,6 +663,16 @@ class Main {
 		}
 	}
 	
+	toggleCalendar() {
+		let visible = $('#calendar').css('display');
+console.log('toggleCalendar(), display=', visible);
+		if (visible == 'none') {
+			$('#calendar').css('display', 'inline');
+		} else {
+			$('#calendar').css('display', 'none');
+		};
+	}
+
 	setVolume(volume) {
 		localStorage.setItem('mclock.volume', volume);
 	}
