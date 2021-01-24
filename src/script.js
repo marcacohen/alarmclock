@@ -463,8 +463,8 @@ class Main {
         // Enable Alarm features
         this.enableAlarmFeatures();
         // Wireup some event handlers
-        $('#date').click(this.toggleCalendar.bind(this));
-        $('#calendar').click(this.toggleCalendar.bind(this));
+        $('.viewport').click(this.hideCalendar);
+        $('#date').click(this.showCalendar);
         $(".brightness").click(this.enableBrightness.bind(this));
         this.brightness = document.querySelector("#brightness");
         this.brightness.value = brightness;
@@ -526,16 +526,14 @@ class Main {
             console.log('error setting brightness');
         }
     }
-    toggleCalendar() {
-        let visible = $('#calendar').css('display');
-        console.log('toggleCalendar(), display=', visible);
-        if (visible == 'none') {
-            $('#calendar').css('display', 'inline');
-        }
-        else {
-            $('#calendar').css('display', 'none');
-        }
-        ;
+    showCalendar() {
+        console.log('showing cal');
+        $('#calendar').css('display', 'inline');
+        return false;
+    }
+    hideCalendar() {
+        console.log('hiding cal');
+        $('#calendar').css('display', 'none');
     }
     setVolume(volume) {
         localStorage.setItem('mclock.volume', volume);
