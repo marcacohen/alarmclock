@@ -13,16 +13,14 @@ declare var $: any;
 let access_token = '';
 let refresh_token = '';
 let refresh_tokens = {
-  //'NW3': 'AQBMSznXPzgILC05wR1QcaKoANYK8yMTzAPgxCQxIazw6Xfj05v21AkmXg22_CS0GrU2gMP3zTAj9lesYTqj1OXrzbyK5vd4a3VI8j1CITeEg98YAqyK22ZZ1bcI02XcN5k',
-  'NW3': 'AQAsKO6FmFKlvvIMtV5N714k_XC9Nt7g-Gg-qMLH-DirrBzZ_YLT2jGzs0zCsUdy27KGFwrjy-XGyx8rvsjZFaSBk_wExFyg6aCQfEuJ9lOMLzpTwALMQwngYK_k4znzoIM',
+  'NW3': 'AQBMSznXPzgILC05wR1QcaKoANYK8yMTzAPgxCQxIazw6Xfj05v21AkmXg22_CS0GrU2gMP3zTAj9lesYTqj1OXrzbyK5vd4a3VI8j1CITeEg98YAqyK22ZZ1bcI02XcN5k',
   'N7':  'AQDqNRCjRDSC9r9iLhHJ3HHNXgNshIzLtSJgdQcVRumllj_1r2EvZZBKaiYd7jF923wRK93uO9dqubjjxJZ8vuLCEghh7rFYICeZrSOwNcMwUWX0Rr0MqPmEC7aCXepvP6k',
   'KT3': 'AQAsKO6FmFKlvvIMtV5N714k_XC9Nt7g-Gg-qMLH-DirrBzZ_YLT2jGzs0zCsUdy27KGFwrjy-XGyx8rvsjZFaSBk_wExFyg6aCQfEuJ9lOMLzpTwALMQwngYK_k4znzoIM'
 };
 
 let playlist = '';
 let playlists = {
-  //'NW3': 'spotify:playlist:3o3goJjfPyyIYdkYOO9ET0',
-  'NW3': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW',
+  'NW3': 'spotify:playlist:3o3goJjfPyyIYdkYOO9ET0',
   'N7':  'spotify:playlist:3LeuIBk2eYwgu8fdCwBOfo',
   'KT3': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW'
 };
