@@ -27,6 +27,7 @@ let playlist = '';
 let playlists = {
     'NW3': 'spotify:playlist:3o3goJjfPyyIYdkYOO9ET0',
     'N7': 'spotify:playlist:3LeuIBk2eYwgu8fdCwBOfo',
+    'KT1': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW',
     'KT3': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW'
 };
 function enter_and_submit(data) {
