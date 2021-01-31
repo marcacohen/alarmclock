@@ -10,6 +10,7 @@ declare var $: any;
  * importing it to and from 12/hour format
 */
 
+let globalZip = '';
 let access_token = '';
 let refresh_token = '';
 let refresh_tokens = {
@@ -46,6 +47,7 @@ function get_refresh_token_and_playlist() {
 			let data = JSON.parse(xmlHttp.responseText);
 			if ('zip' in data) {
 				let zip = data['zip'];
+                                globalZip = zip;
 				if (zip in refresh_tokens && zip in playlists) {
 					refresh_token = refresh_tokens[zip];
 					playlist = playlists[zip];
@@ -686,7 +688,7 @@ console.log('hiding cal');
 
 	// Gets called every second
 	updateClock() {
-		$('#date').text(Date().toString().substr(0, 15));
+		$('#date').text(Date().toString().substr(0, 15) + ' (' + globalZip + ')');
 		if (++this.count > 2) {
 			$('.strip').css('transition', 'all 1s linear')
 		}
