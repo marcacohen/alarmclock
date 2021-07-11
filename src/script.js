@@ -324,7 +324,12 @@ class Main {
         this.setBrightness(brightness);
         this.brightness.addEventListener("input", this.updateBrightness.bind(this), false);
         this.brightness.select();
-        //this.setVolume(volume);
+        $(".volume").click(this.enableVolume.bind(this));
+        this.volume = document.querySelector("#volume");
+        this.volume.value = volume;
+        this.setVolume(volume);
+        this.volume.addEventListener("input", this.updateVolume.bind(this), false);
+        this.volume.select();
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
         $(".timer-set").click(this.toggleTimerMode.bind(this));
         $(".alarm-24hr").click(this.toggle24hrMode.bind(this));
@@ -391,10 +396,15 @@ class Main {
     }
     setVolume(volume) {
         localStorage.setItem('mclock.volume', volume);
+        $("#player")[0].volume = volume;
     }
     updateBrightness(ev) {
         let brightness = ev.target.value;
         this.setBrightness(brightness);
+    }
+    updateVolume(ev) {
+        let volume = ev.target.value;
+        this.setVolume(volume);
     }
     // Gets called every second
     updateClock() {
@@ -517,6 +527,15 @@ class Main {
         }
         else {
             this.brightness.style.display = 'none';
+        }
+        ;
+    }
+    enableVolume() {
+        if (this.volume.style.display == 'none') {
+            this.volume.style.display = 'inline';
+        }
+        else {
+            this.volume.style.display = 'none';
         }
         ;
     }
