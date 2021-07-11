@@ -339,6 +339,7 @@ class Main {
         $(".minutes .down").click(this.decrementAlarmMinutes.bind(this));
         $(".am-pm .up").click(this.alarmToAm.bind(this));
         $(".am-pm .down").click(this.alarmToPm.bind(this));
+        $(".alarm-melody-play").click(this.soundAlarm.bind(this));
         this.alarmEnabled = false;
         $(".alarm-enable").click(this.alarmEnable.bind(this));
         let alarmEnabled = localStorage.getItem('mclock.alarm.enabled');
@@ -651,7 +652,20 @@ class Main {
     }
     soundAlarm() {
         console.log('soundAlarm...');
-        $('#rswp__play').click();
+        if (this.alarmPlaying) {
+            $("#player")[0].pause();
+            $("#player")[0].currentTime = 0;
+            $(".alarm-melody-play").removeClass("toggled");
+            this.alarmPlaying = false;
+        }
+        else {
+            $("#player")[0].play();
+            $(".alarm-melody-play").addClass("toggled");
+            this.alarmPlaying = true;
+            // Disable sleep mode in case it was activated
+            $(".alarm-snooze").removeClass("toggled");
+            this.alarmSleepActivated = false;
+        }
     }
     timerEnable() {
         this.timerEnabled = !this.timerEnabled;
@@ -712,11 +726,9 @@ class Main {
         }
     }
     enableAlarmFeatures() {
-        if (FileReader) {
-            $("button:disabled").prop('disabled', false);
-            $(".support").removeClass('not-supported');
-            $(".support").addClass('supported');
-        }
+        $("button:disabled").prop('disabled', false);
+        $(".support").removeClass('not-supported');
+        $(".support").addClass('supported');
     }
 }
 $(function () {

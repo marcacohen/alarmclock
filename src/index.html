@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Courier">
 </head>
 <body>
-<div id="version" style="display: none">1.1</div>
+<audio id="player" src="alarm.mp3" loop></audio>
+<div id="version" style="display: none">1.2</div>
 <div class="viewport">
     <div id="date" style="font-size: 50px; font-weight: bold; position: absolute; top: 15px"></div>
 <iframe id="calendar" src="https://calendar.google.com/calendar/embed?height=480&amp;wkst=1&amp;bgcolor=%23039BE5&amp;ctz=Europe%2FLondon&amp;src=marcacohen%40gmail.com&amp;src=marccohen%40google.com&amp;color=%23039BE5&amp;color=%2333B679&amp;color=%23F6BF26&amp;color=%237986CB&amp;color=%230B8043&amp;color=%233F51B5&amp;showTz=0&amp;showCalendars=1&amp;showTabs=0&amp;showPrint=0&amp;showDate=0&amp;showNav=0&amp;showTitle=0&amp;mode=AGENDA" style="position: absolute; top: 20px; z-index: 10; display: none; border:solid 1px #777" width="700" height="400" frameborder="0" scrolling="no"></iframe>
@@ -94,7 +95,7 @@
             <button disabled title="Set the alarm" class="alarm-set"><i class="fas fa-bell"></i></button>
             <button disabled title="Set the timer" class="timer-set"><i class="fas fa-stopwatch"></i></button>
             <button disabled title="Background Color" class="alarm-bgcolor"><i class="fas fa-brush"></i><input id="alarm-bgcolor" name="alarm-bgcolor" style="display: none" value="#2e5090" type="color"></button>
-            <button title="Enable/Disable 24/hr mode" class="alarm-24hr"><i class="far fa-clock"></i></button>
+            <button disabled title="Manually start/stop alarm" class="alarm-melody-play"><span class="fa fa-play"></span></button>
             <button disabled title="Snooze for 5 minutes" class="alarm-snooze"><span class="fa fa-bed"></span></button>
         </div>
     </div>
