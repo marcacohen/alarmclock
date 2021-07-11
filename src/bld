@@ -1,5 +1,5 @@
 tsc -t es6 script.ts
-stylus -I node_modules/nib/lib style.styl -o style.css
+stylus -u nib -I node_modules/nib/lib style.styl -o style.css
 cp pi.desktop ~/.config/autostart
 if [ -f "/etc/xdg" ]
 then

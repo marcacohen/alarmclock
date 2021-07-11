@@ -463,7 +463,12 @@ class Main {
   	this.brightness.addEventListener("input", this.updateBrightness.bind(this), false);
 	this.brightness.select();
 
-	//this.setVolume(volume);
+	$(".volume").click(this.enableVolume.bind(this));
+	this.volume = document.querySelector("#volume");
+	this.volume.value = volume;
+	this.setVolume(volume);
+  	this.volume.addEventListener("input", this.updateVolume.bind(this), false);
+	this.volume.select();
 
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
         $(".timer-set").click(this.toggleTimerMode.bind(this));
@@ -544,11 +549,17 @@ console.log('hiding cal');
 
 	setVolume(volume) {
 		localStorage.setItem('mclock.volume', volume);
+                $("#player")[0].volume = volume;
 	}
 
 	updateBrightness(ev) {
 		let brightness = ev.target.value;
 		this.setBrightness(brightness);
+	}
+
+	updateVolume(ev) {
+		let volume = ev.target.value;
+		this.setVolume(volume);
 	}
 
 	// Gets called every second
@@ -689,6 +700,14 @@ console.log('hiding cal');
 			this.brightness.style.display = 'none';
 		};
 	}
+
+	enableVolume() {
+		if (this.volume.style.display == 'none') {
+			this.volume.style.display = 'inline';
+		} else {
+			this.volume.style.display = 'none';
+		};
+        }
 
 	setAlarmColor() {
 		this.bgcolor.click();
@@ -931,6 +950,7 @@ console.log('hiding cal');
 	count: number;
 	bgcolor: any;
 	brightness: any;
+        volume: any;
 	clock: Clock;
 	alarm: Clock;
 	timer: Clock;
