@@ -274,6 +274,7 @@ class Main {
         }
         // Create the clock
         this.clock = new Clock();
+        this.lastMinute = -1;
         // and the alarm clock, disabling alarm mode
         this.alarm = new Clock();
         this.alarm.isAlarm = true;
@@ -411,8 +412,10 @@ class Main {
                 var clockHours = this.clock.time24.hours;
                 var clockMinutes = this.clock.time24.minutes;
                 if (alarmHours == clockHours &&
-                    alarmMinutes == clockMinutes)
+                    alarmMinutes == clockMinutes &&
+                    clockMinutes != this.lastMinute)
                     this.soundAlarm();
+                this.lastMinute = clockMinutes;
             }
         }
         if (!this.timerMode) {
@@ -651,7 +654,6 @@ class Main {
         }
     }
     soundAlarm() {
-        console.log('soundAlarm...');
         if (this.alarmPlaying) {
             $("#player")[0].pause();
             $("#player")[0].currentTime = 0;
