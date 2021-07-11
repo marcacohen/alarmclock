@@ -1,3 +1,0 @@
-TOKEN="BQDnVUoJ71Mxt58dTIyBDPUhgdSGSqLPts7pXCTFXufZVI5-1L5oS9swhhgRRPIsChr3WyOmzOk6onMlSZ_55xp49KhZAllwI1lbKEi8WRpeICYXOcdkJ0trbVf1AzNWzsB43hd-2ufHIMhiz3D9yNBNy9kSLyTEkoD1wR5tY4uoDsep_YkaI2rJGlN3XLKF5EWhEbtskUJ0Y48-NwwK3A"
-
-curl -v -X "PUT" "https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=882d3f52d2f33ec6477f916838acf264fbafbb5b" -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN"
