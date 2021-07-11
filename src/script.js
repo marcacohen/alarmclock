@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 /*
  * A thin wrapper around Javascripts Date object
  * Provides extra methods for better managing
@@ -7,27 +16,29 @@
  * to that but add some extra methods for exporting and
  * importing it to and from 12/hour format
 */
-var access_token = '';
-var refresh_token = '';
-var refresh_tokens = {
+let access_token = '';
+let refresh_token = '';
+let refresh_tokens = {
     'NW3': 'AQBMSznXPzgILC05wR1QcaKoANYK8yMTzAPgxCQxIazw6Xfj05v21AkmXg22_CS0GrU2gMP3zTAj9lesYTqj1OXrzbyK5vd4a3VI8j1CITeEg98YAqyK22ZZ1bcI02XcN5k',
-    'N1': 'AQDqNRCjRDSC9r9iLhHJ3HHNXgNshIzLtSJgdQcVRumllj_1r2EvZZBKaiYd7jF923wRK93uO9dqubjjxJZ8vuLCEghh7rFYICeZrSOwNcMwUWX0Rr0MqPmEC7aCXepvP6k',
+    'N7': 'AQDqNRCjRDSC9r9iLhHJ3HHNXgNshIzLtSJgdQcVRumllj_1r2EvZZBKaiYd7jF923wRK93uO9dqubjjxJZ8vuLCEghh7rFYICeZrSOwNcMwUWX0Rr0MqPmEC7aCXepvP6k',
+    'KT1': 'AQAsKO6FmFKlvvIMtV5N714k_XC9Nt7g-Gg-qMLH-DirrBzZ_YLT2jGzs0zCsUdy27KGFwrjy-XGyx8rvsjZFaSBk_wExFyg6aCQfEuJ9lOMLzpTwALMQwngYK_k4znzoIM',
     'KT3': 'AQAsKO6FmFKlvvIMtV5N714k_XC9Nt7g-Gg-qMLH-DirrBzZ_YLT2jGzs0zCsUdy27KGFwrjy-XGyx8rvsjZFaSBk_wExFyg6aCQfEuJ9lOMLzpTwALMQwngYK_k4znzoIM'
 };
-var playlist = '';
-var playlists = {
-    'NW3': 'spotify:playlist:2IlCUBWJCOvGSXGUIZuS0Q',
-    'N1': 'spotify:playlist:3LeuIBk2eYwgu8fdCwBOfo',
+let playlist = '';
+let playlists = {
+    'NW3': 'spotify:playlist:3o3goJjfPyyIYdkYOO9ET0',
+    'N7': 'spotify:playlist:3LeuIBk2eYwgu8fdCwBOfo',
+    'KT1': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW',
     'KT3': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW'
 };
 function enter_and_submit(data) {
-    var elem = document.getElementsByClassName('sc-jSgupP ckDfJz')[0];
+    let elem = document.getElementsByClassName('sc-jSgupP ckDfJz')[0];
     var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
     nativeInputValueSetter.call(elem, data);
-    var event = new Event('input', { bubbles: true });
+    let event = new Event('input', { bubbles: true });
     elem.dispatchEvent(event);
     elem = document.getElementsByClassName('sc-gsTCUz bhdLno')[0];
-    var opts = { view: window, bubbles: true, cancelable: true, buttons: 1 };
+    let opts = { view: window, bubbles: true, cancelable: true, buttons: 1 };
     elem.dispatchEvent(new MouseEvent("mousedown", opts));
     elem.dispatchEvent(new MouseEvent("mouseup", opts));
     elem.dispatchEvent(new MouseEvent("click", opts));
@@ -36,9 +47,9 @@ function get_refresh_token_and_playlist() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var data = JSON.parse(xmlHttp.responseText);
+            let data = JSON.parse(xmlHttp.responseText);
             if ('zip' in data) {
-                var zip = data['zip'];
+                let zip = data['zip'];
                 if (zip in refresh_tokens && zip in playlists) {
                     refresh_token = refresh_tokens[zip];
                     playlist = playlists[zip];
@@ -63,35 +74,87 @@ function get_refresh_token_and_playlist() {
         console.log('error sending geoip request');
     }
 }
-function get_access_token() {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var data = JSON.parse(xmlHttp.responseText);
-            if ('access_token' in data) {
-                access_token = data['access_token'];
-                console.log('access token: ' + access_token);
-                localStorage.setItem('rswp_token', access_token);
+function get_access_token(callback) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let auth_str = 'Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI';
+        let body = 'grant_type=refresh_token&refresh_token=' + refresh_token;
+        let url = 'https://accounts.spotify.com/api/token';
+        $.ajax(url, {
+            type: 'POST',
+            data: body,
+            dataType: 'json',
+            headers: {
+                'Authorization': auth_str,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            success: function (data, status, xhr) {
+                if ('access_token' in data) {
+                    console.log('access token found in refresh response');
+                    access_token = data['access_token'];
+                }
+                else {
+                    console.log('access token not found in refresh response');
+                }
+            },
+            error: function (data, stastus, xhr) {
+                console.log('error sending refresh request');
             }
-            else {
-                console.log('access token not found in refresh response');
-            }
+        });
+        for (let i = 0; i < 20 && !access_token; i++) {
+            console.log('waiting for access token...');
+            yield new Promise(r => setTimeout(r, 100));
         }
-        ;
-    };
-    xmlHttp.open('POST', 'https://accounts.spotify.com/api/token', false);
-    xmlHttp.setRequestHeader('Authorization', 'Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI');
-    xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var body = 'grant_type=refresh_token&refresh_token=' + refresh_token;
-    try {
-        xmlHttp.send(body);
+        console.log('got new access token: ' + access_token);
+        localStorage.setItem('rswp_token', access_token);
+        callback(access_token);
+    });
+}
+let shuffle = false;
+function enable_shuffle(device_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log('enable shuffle');
+        if (shuffle) {
+            console.log('shuffle already enabled');
+            return;
+        }
+        shuffle = true;
+        yield new Promise(r => setTimeout(r, 100));
+        let url = 'https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=' + device_id;
+        $.ajax(url, {
+            type: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            success: function (data, status, xhr) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    console.log('shuffle set');
+                    yield new Promise(r => setTimeout(r, 200));
+                    $('#rswp__next').click();
+                });
+            },
+            error: function (data, stastus, xhr) {
+                shuffle = false;
+                console.log('error enabling shuffle');
+            }
+        });
+    });
+}
+function update_player_state() {
+    console.log('player state update');
+    let m = window.main;
+    if (m.alarmPlaying) {
+        m.alarmPlaying = false;
     }
-    catch (_a) {
-        console.log('error sending refresh request');
+    else {
+        m.alarmPlaying = true;
+        // Disable sleep mode in case it was activated
+        $(".alarm-snooze").removeClass("toggled");
+        m.alarmSleepActivated = false;
     }
 }
 $(document).ready(function () {
-    var version = $('#version').text();
+    let version = $('#version').text();
     console.log('version: ' + version);
     if (version == '1.1') {
         get_refresh_token_and_playlist();
@@ -100,20 +163,25 @@ $(document).ready(function () {
     $(document).bind("contextmenu", function (e) {
         return false;
     });
+    setInterval(() => {
+        let m = window.main;
+        if (!m.alarmPlaying) {
+            console.log('reloading...');
+            window.location.reload();
+        }
+    }, 1800000);
 });
-var Time = /** @class */ (function () {
+class Time {
     // A date object can be provided if desired to give a preset time
     // otherwise a current date will be creted
-    function Time(date) {
-        if (date === void 0) { date = new Date(); }
+    constructor(date = new Date()) {
         this.date = date;
     }
     // Import a time from 12 hour format to 24 hour format
     // If a current Time object is given it will be updated
     // with the new time otherwise a new Time object will be
     // created
-    Time.from12 = function (time12, time24) {
-        if (time24 === void 0) { time24 = new Time(); }
+    static from12(time12, time24 = new Time()) {
         var hours24 = time12.hours;
         var minutes = time12.minutes;
         if (!time12.pm && hours24 == 12) {
@@ -125,10 +193,9 @@ var Time = /** @class */ (function () {
         time24.date.setHours(hours24);
         time24.date.setMinutes(minutes);
         return time24;
-    };
+    }
     // Export a time to 12 hour format from 24 hour format
-    Time.prototype.to12 = function (time12) {
-        if (time12 === void 0) { time12 = { hours: 0, minutes: 0, pm: false }; }
+    to12(time12 = { hours: 0, minutes: 0, pm: false }) {
         var hours24 = this.hours;
         var hours12 = ((hours24 + 11) % 12 + 1);
         var pm = hours24 > 11;
@@ -137,89 +204,69 @@ var Time = /** @class */ (function () {
         time12.minutes = minutes;
         time12.pm = pm;
         return time12;
-    };
-    Object.defineProperty(Time.prototype, "hours", {
-        // Getters and setters for conv.
-        // Upon hours or minutes changing, an event will be fired
-        // the event object will contain the new and old value
-        get: function () {
-            return this.date.getHours();
-        },
-        set: function (hours) {
-            if (hours === this.hours)
-                return;
-            $(this).trigger("hoursChange", [hours, this.hours]);
-            this.date.setHours(hours);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Time.prototype, "minutes", {
-        get: function () {
-            return this.date.getMinutes();
-        },
-        set: function (minutes) {
-            if (minutes === this.minutes)
-                return;
-            $(this).trigger("minutesChange", [minutes, this.minutes]);
-            this.date.setMinutes(minutes);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Time;
-}());
+    }
+    // Getters and setters for conv.
+    // Upon hours or minutes changing, an event will be fired
+    // the event object will contain the new and old value
+    get hours() {
+        return this.date.getHours();
+    }
+    set hours(hours) {
+        if (hours === this.hours)
+            return;
+        $(this).trigger("hoursChange", [hours, this.hours]);
+        this.date.setHours(hours);
+    }
+    get minutes() {
+        return this.date.getMinutes();
+    }
+    set minutes(minutes) {
+        if (minutes === this.minutes)
+            return;
+        $(this).trigger("minutesChange", [minutes, this.minutes]);
+        this.date.setMinutes(minutes);
+    }
+}
 /*
  * Interfaces with a spinner
 */
-var Spinner = /** @class */ (function () {
+class Spinner {
     // To what spinner group and spinner group entry does this interface belong
     // What should the spinner be set to automatically
-    function Spinner(groupName, groupEntryId, notchId) {
-        if (notchId === void 0) { notchId = 0; }
+    constructor(groupName, groupEntryId, notchId = 0) {
         this.groupName = groupName;
         this.groupEntryId = groupEntryId;
         this.notchId = notchId;
     }
     // Re-update the spinner based on the existing value stored here
-    Spinner.prototype.refresh = function () {
+    refresh() {
         $("." + this.groupName
             + " .slot-" + this.groupEntryId
             + " .strip").removeClass(Spinner.notchesCSS);
         $("." + this.groupName
             + " .slot-" + this.groupEntryId
             + " .strip").addClass("pos-" + this.notchId);
-    };
-    Object.defineProperty(Spinner.prototype, "notchId", {
-        get: function () {
-            return this._notchId;
-        },
-        // Re-adjust the spinner to a new value
-        set: function (value) {
-            if (this.notchId == value)
-                return;
-            $(this).trigger("notchIdChange", [value, this._notchId]);
-            this._notchId = value;
-            this.refresh();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    // A spinner has 9 notches
-    Spinner.notchesCSS = "pos-0 pos-1 pos-2 pos-3 pos-4 pos-5 pos-6 pos-7 pos-8 pos-9";
-    return Spinner;
-}());
+    }
+    get notchId() {
+        return this._notchId;
+    }
+    // Re-adjust the spinner to a new value
+    set notchId(value) {
+        if (this.notchId == value)
+            return;
+        $(this).trigger("notchIdChange", [value, this._notchId]);
+        this._notchId = value;
+        this.refresh();
+    }
+}
+// A spinner has 9 notches
+Spinner.notchesCSS = "pos-0 pos-1 pos-2 pos-3 pos-4 pos-5 pos-6 pos-7 pos-8 pos-9";
 /*
  * This interfaces to 2 spinners and treats them like 2-digit
  * numbers with an optionally clamped min and max range
 */
-var SpinnerGroupDigits = /** @class */ (function () {
-    function SpinnerGroupDigits(groupName, value, min, max, spinner1, spinner2) {
-        if (value === void 0) { value = 0; }
-        if (min === void 0) { min = undefined; }
-        if (max === void 0) { max = undefined; }
-        if (spinner1 === void 0) { spinner1 = new Spinner(groupName, 1); }
-        if (spinner2 === void 0) { spinner2 = new Spinner(groupName, 2); }
+class SpinnerGroupDigits {
+    constructor(groupName, value = 0, min = undefined, max = undefined, spinner1 = new Spinner(groupName, 1), spinner2 = new Spinner(groupName, 2)) {
         this.groupName = groupName;
         this.spinner1 = spinner1;
         this.spinner2 = spinner2;
@@ -229,12 +276,12 @@ var SpinnerGroupDigits = /** @class */ (function () {
     }
     // Re-update both spinners to the existing value
     // Useful for when switching from another SpinnerGroupDigits
-    SpinnerGroupDigits.prototype.refresh = function () {
+    refresh() {
         this.spinner1.refresh();
         this.spinner2.refresh();
-    };
+    }
     // Re-update the spinners to the value stored here
-    SpinnerGroupDigits.prototype.updateValue = function () {
+    updateValue() {
         if (this.value < 10) {
             this.spinner1.notchId = 0;
             this.spinner2.notchId = this.value;
@@ -246,64 +293,51 @@ var SpinnerGroupDigits = /** @class */ (function () {
             this.spinner1.notchId = parseInt(digit1);
             this.spinner2.notchId = parseInt(digit2);
         }
-    };
+    }
     // Ensure the value stored here is within valid range if set
-    SpinnerGroupDigits.prototype.validate = function () {
+    validate() {
         if (this.maxLimit !== undefined && this.value > this.maxLimit)
             this._value = this.maxLimit;
         else if (this.minLimit !== undefined && this.value < this.minLimit)
             this._value = this.minLimit;
-    };
-    Object.defineProperty(SpinnerGroupDigits.prototype, "value", {
-        get: function () {
-            return this._value;
-        },
-        set: function (value) {
-            if (this.value === value)
-                return;
-            $(this).trigger("valueChange", [value, this._value]);
-            this._value = value;
-            this.validate();
-            this.updateValue();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SpinnerGroupDigits.prototype, "maxLimit", {
-        get: function () {
-            return this._maxLimit;
-        },
-        set: function (value) {
-            $(this).trigger("maxLimitChange", [value, this._maxLimit]);
-            this._maxLimit = value;
-            this.validate();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SpinnerGroupDigits.prototype, "minLimit", {
-        get: function () {
-            return this._minLimit;
-        },
-        set: function (value) {
-            $(this).trigger("minLimitChange", [value, this._minLimit]);
-            this._minLimit = value;
-            this.validate();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return SpinnerGroupDigits;
-}());
+    }
+    get value() {
+        return this._value;
+    }
+    set value(value) {
+        if (this.value === value)
+            return;
+        $(this).trigger("valueChange", [value, this._value]);
+        this._value = value;
+        this.validate();
+        this.updateValue();
+    }
+    set maxLimit(value) {
+        $(this).trigger("maxLimitChange", [value, this._maxLimit]);
+        this._maxLimit = value;
+        this.validate();
+    }
+    get maxLimit() {
+        return this._maxLimit;
+    }
+    set minLimit(value) {
+        $(this).trigger("minLimitChange", [value, this._minLimit]);
+        this._minLimit = value;
+        this.validate();
+    }
+    get minLimit() {
+        return this._minLimit;
+    }
+}
 /*
  * A clock interfaces with the dials on the page
  * Multiple clocks can exist but they will all use the same dials
  * so its important to ensure only one clock is actively used
  * at a time if more than one exists
 */
-var Clock = /** @class */ (function () {
+class Clock {
     // Create
-    function Clock() {
+    constructor() {
         this.isAlarm = false;
         this.isTimer = false;
         // Create proper interfaces to the dials
@@ -319,20 +353,19 @@ var Clock = /** @class */ (function () {
     // cache, if the 24-hour clock backend has changed it wont be reflected
     // here as only old values are refreshed.
     // Useful when switching active clocks
-    Clock.prototype.refresh = function () {
+    refresh() {
         this.hours.refresh();
         this.minutes.refresh();
         this.amPm.refresh();
-    };
+    }
     // Update the 24-hour backend to represent the current time
     // and reflect those changes on the dials
-    Clock.prototype.currentTime = function () {
+    currentTime() {
         this.time24 = new Time();
         this.updateTime(false);
-    };
+    }
     // Update the dials to whatever the current 24-hour backend has
-    Clock.prototype.updateTime = function (saveTimer) {
-        if (saveTimer === void 0) { saveTimer = true; }
+    updateTime(saveTimer = true) {
         if (this.hr24Mode) {
             this.hours.value = this.time24.hours;
             this.minutes.value = this.time24.minutes;
@@ -352,57 +385,42 @@ var Clock = /** @class */ (function () {
             localStorage.setItem('mclock.alarm.pm', this.time24.to12().pm.toString());
         }
         else if (this.isTimer) {
-            this.secondsToWait = (this.time24.hours * 3600) + (this.time24.minutes * 60);
-            console.log(this.secondsToWait);
             if (saveTimer) {
                 localStorage.setItem('mclock.timer.hours', this.time24.hours.toString());
                 localStorage.setItem('mclock.timer.minutes', this.time24.minutes.toString());
             }
         }
-    };
-    Object.defineProperty(Clock.prototype, "hr24Mode", {
-        // When changing 24-hour mode, the hours dial must be updated
-        get: function () {
-            return this._hr24Mode;
-        },
-        set: function (value) {
-            this._hr24Mode = value;
-            if (value) {
-                this.hours = new SpinnerGroupDigits("hours", 0, 0, 23);
-            }
-            else {
-                this.hours = new SpinnerGroupDigits("hours", 0, 1, 12);
-            }
-            this.updateTime(false);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Clock;
-}());
-var Main = /** @class */ (function () {
-    function Main() {
+    }
+    // When changing 24-hour mode, the hours dial must be updated
+    get hr24Mode() {
+        return this._hr24Mode;
+    }
+    set hr24Mode(value) {
+        this._hr24Mode = value;
+        if (value) {
+            this.hours = new SpinnerGroupDigits("hours", 0, 0, 23);
+        }
+        else {
+            this.hours = new SpinnerGroupDigits("hours", 0, 1, 12);
+        }
+        this.updateTime(false);
+    }
+}
+class Main {
+    constructor() {
         document.body.style.cursor = 'none';
         this.count = 0;
-        var brightness = localStorage.getItem('mclock.brightness');
+        let brightness = localStorage.getItem('mclock.brightness');
         if (!brightness) {
             brightness = '127';
         }
-        var volume = localStorage.getItem('mclock.volume');
+        let volume = localStorage.getItem('mclock.volume');
         if (!volume) {
             volume = '.1';
         }
-        var color = localStorage.getItem('mclock.bgcolor');
+        let color = localStorage.getItem('mclock.bgcolor');
         if (!color) {
             color = '#2e5090';
-        }
-        var audio = localStorage.getItem('mclock.audio');
-        if (audio) {
-            this.fileReader = new FileReader();
-            this.fileReaderDone = true;
-            $("#player")[0].src = audio;
-            $("#player")[0].volume = .1;
-            $(".alarm-melody").addClass("toggled");
         }
         // Create the clock
         this.clock = new Clock();
@@ -413,52 +431,49 @@ var Main = /** @class */ (function () {
         this.timer = new Clock();
         this.timer.isTimer = true;
         this.timer.hr24Mode = true;
-        var hours = localStorage.getItem('mclock.alarm.hours');
+        let hours = localStorage.getItem('mclock.alarm.hours');
         this.alarm.time24.hours = 0;
         this.alarm.time24.minutes = 0;
         this.alarm.time24.to12().pm = false;
         if (hours != null && hours != 'NaN') {
             this.alarm.time24.hours = parseInt(hours);
         }
-        var minutes = localStorage.getItem('mclock.alarm.minutes');
+        let minutes = localStorage.getItem('mclock.alarm.minutes');
         if (minutes != null && minutes != 'NaN') {
             this.alarm.time24.minutes = parseInt(minutes);
         }
-        var pm = localStorage.getItem('mclock.alarm.pm');
+        let pm = localStorage.getItem('mclock.alarm.pm');
         if (pm != null && pm != 'NaN') {
             this.alarm.time24.to12().pm = (pm == 'true');
         }
-        var thours = localStorage.getItem('mclock.timer.hours');
+        let thours = localStorage.getItem('mclock.timer.hours');
         this.timer.time24.hours = 0;
         this.timer.time24.minutes = 0;
         this.timer.time24.to12().pm = false;
         if (thours != null && thours != 'NaN') {
             this.timer.time24.hours = parseInt(thours);
         }
-        var tminutes = localStorage.getItem('mclock.timer.minutes');
+        let tminutes = localStorage.getItem('mclock.timer.minutes');
         if (tminutes != null && tminutes != 'NaN') {
             this.timer.time24.minutes = parseInt(tminutes);
         }
         this.alarmMode = false;
-        var hr24Mode = localStorage.getItem('mclock.hr24Mode') == 'true';
+        let hr24Mode = localStorage.getItem('mclock.hr24Mode') == 'true';
         if (hr24Mode != this.clock.hr24Mode) {
             this.toggle24hrMode();
         }
         // Enable Alarm features
         this.enableAlarmFeatures();
         // Wireup some event handlers
+        $('.viewport').click(this.hideCalendar);
+        $('#date').click(this.showCalendar);
         $(".brightness").click(this.enableBrightness.bind(this));
         this.brightness = document.querySelector("#brightness");
         this.brightness.value = brightness;
         this.setBrightness(brightness);
         this.brightness.addEventListener("input", this.updateBrightness.bind(this), false);
         this.brightness.select();
-        $(".volume").click(this.enableVolume.bind(this));
-        this.volume = document.querySelector("#volume");
-        this.volume.value = volume;
-        this.setVolume(volume);
-        this.volume.addEventListener("input", this.updateVolume.bind(this), false);
-        this.volume.select();
+        //this.setVolume(volume);
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
         $(".timer-set").click(this.toggleTimerMode.bind(this));
         $(".alarm-24hr").click(this.toggle24hrMode.bind(this));
@@ -474,13 +489,21 @@ var Main = /** @class */ (function () {
         $(".minutes .down").click(this.decrementAlarmMinutes.bind(this));
         $(".am-pm .up").click(this.alarmToAm.bind(this));
         $(".am-pm .down").click(this.alarmToPm.bind(this));
-        $(".alarm-melody").click(this.loadAlarmMelodyFile.bind(this));
-        $("#alarmTone").change(this.isLoadedAlarmMelodyFile.bind(this));
-        $(".alarm-melody-play").click(this.soundAlarm.bind(this));
         this.alarmEnabled = false;
         $(".alarm-enable").click(this.alarmEnable.bind(this));
+        let alarmEnabled = localStorage.getItem('mclock.alarm.enabled');
+        if (alarmEnabled && alarmEnabled == 'true') {
+            this.alarmEnable();
+        }
         this.timerEnabled = false;
         $(".timer-enable").click(this.timerEnable.bind(this));
+        let timerEnabled = localStorage.getItem('mclock.timer.enabled');
+        let fireTime = localStorage.getItem('mclock.timer.fireTime');
+        if (timerEnabled && timerEnabled == 'true' && fireTime) {
+            this.timer.fireTime = parseInt(fireTime);
+            this.timerEnabled = !this.timerEnabled;
+            $(".timer-enable").prop("checked", true);
+        }
         this.alarmSleepActivated = false;
         this.countdownTimerActivated = false;
         this.sleepTimerActivated = false;
@@ -489,12 +512,12 @@ var Main = /** @class */ (function () {
         this.updateClock();
         setInterval(this.updateClock.bind(this), 1000);
     }
-    Main.prototype.updateColor = function (ev) {
-        var color = ev.target.value;
+    updateColor(ev) {
+        let color = ev.target.value;
         $(document.body).css('background-color', color);
         localStorage.setItem('mclock.bgcolor', color);
-    };
-    Main.prototype.setBrightness = function (brightness) {
+    }
+    setBrightness(brightness) {
         localStorage.setItem('mclock.brightness', brightness);
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open("GET", 'http://127.0.0.1:5000/' + '?b=' + brightness, false);
@@ -504,21 +527,25 @@ var Main = /** @class */ (function () {
         catch (_a) {
             console.log('error setting brightness');
         }
-    };
-    Main.prototype.setVolume = function (volume) {
+    }
+    showCalendar() {
+        console.log('showing cal');
+        $('#calendar').css('display', 'inline');
+        return false;
+    }
+    hideCalendar() {
+        console.log('hiding cal');
+        $('#calendar').css('display', 'none');
+    }
+    setVolume(volume) {
         localStorage.setItem('mclock.volume', volume);
-        $("#player")[0].volume = volume;
-    };
-    Main.prototype.updateBrightness = function (ev) {
-        var brightness = ev.target.value;
+    }
+    updateBrightness(ev) {
+        let brightness = ev.target.value;
         this.setBrightness(brightness);
-    };
-    Main.prototype.updateVolume = function (ev) {
-        var volume = ev.target.value;
-        this.setVolume(volume);
-    };
+    }
     // Gets called every second
-    Main.prototype.updateClock = function () {
+    updateClock() {
         $('#date').text(Date().toString().substr(0, 15));
         if (++this.count > 2) {
             $('.strip').css('transition', 'all 1s linear');
@@ -539,21 +566,16 @@ var Main = /** @class */ (function () {
         }
         if (!this.timerMode) {
             if (this.timerEnabled) {
-                var startTime = this.timer.startTime;
-                var secondsToWait = this.timer.secondsToWait;
                 var currentSeconds = Math.floor(this.clock.time24.date.getTime() / 1000);
-                //console.log('startTime:', startTime);
-                //console.log('secondsToWait:', secondsToWait);
-                //console.log('currentSeconds:', currentSeconds);
-                if (startTime + secondsToWait < currentSeconds) {
+                if (this.timer.fireTime < currentSeconds) {
                     this.soundAlarm();
                     this.timerEnable();
                 }
             }
         }
-    };
+    }
     // Used when switching clocks between current clock and alarm clock
-    Main.prototype.refreshClock = function () {
+    refreshClock() {
         if (this.alarmMode) {
             // Apply new values to all the sliders for this clock
             this.alarm.updateTime();
@@ -572,78 +594,70 @@ var Main = /** @class */ (function () {
             this.updateClock();
             this.clock.refresh();
         }
-    };
-    Object.defineProperty(Main.prototype, "alarmMode", {
-        get: function () {
-            return this._alarmMode;
-        },
-        // Force a refresh on clock switch
-        set: function (value) {
-            this._alarmMode = value;
-            this.refreshClock();
-            if (value) {
-                $(".alarm-set").addClass("toggled");
-                $(".arrow").removeClass("hidden");
-                $(".arrow").removeClass("hidden");
-                if (this.alarm.hr24Mode) {
-                    $(".am-pm .arrow").addClass("hidden");
-                }
-                if (this.alarm.hr24Mode)
-                    $(".alarm-24hr").addClass("toggled");
-                else
-                    $(".alarm-24hr").removeClass("toggled");
-            }
-            else {
-                $(".alarm-set").removeClass("toggled");
-                $(".arrow").addClass("hidden");
-                $(".arrow").addClass("hidden");
-                if (this.clock.hr24Mode)
-                    $(".alarm-24hr").addClass("toggled");
-                else
-                    $(".alarm-24hr").removeClass("toggled");
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Main.prototype, "timerMode", {
-        get: function () {
-            return this._timerMode;
-        },
-        set: function (value) {
-            this._timerMode = value;
-            this.refreshClock();
-            if (value) {
-                $(".timer-set").addClass("toggled");
-                $(".arrow").removeClass("hidden");
-                $(".arrow").removeClass("hidden");
-                $(".am-pm").addClass("hidden");
+    }
+    get alarmMode() {
+        return this._alarmMode;
+    }
+    // Force a refresh on clock switch
+    set alarmMode(value) {
+        this._alarmMode = value;
+        this.refreshClock();
+        if (value) {
+            $(".alarm-set").addClass("toggled");
+            $(".arrow").removeClass("hidden");
+            $(".arrow").removeClass("hidden");
+            if (this.alarm.hr24Mode) {
                 $(".am-pm .arrow").addClass("hidden");
             }
-            else {
-                $(".timer-set").removeClass("toggled");
-                $(".arrow").addClass("hidden");
-                $(".arrow").addClass("hidden");
-                $(".am-pm").removeClass("hidden");
-                $(".am-pm .arrow").addClass("hidden");
-                if (this.clock.hr24Mode) {
-                    $(".alarm-24hr").addClass("toggled");
-                }
-                else {
-                    $(".alarm-24hr").removeClass("toggled");
-                }
+            if (this.alarm.hr24Mode)
+                $(".alarm-24hr").addClass("toggled");
+            else
+                $(".alarm-24hr").removeClass("toggled");
+        }
+        else {
+            $(".alarm-set").removeClass("toggled");
+            $(".arrow").addClass("hidden");
+            $(".arrow").addClass("hidden");
+            if (this.clock.hr24Mode)
+                $(".alarm-24hr").addClass("toggled");
+            else
+                $(".alarm-24hr").removeClass("toggled");
+        }
+    }
+    get timerMode() {
+        return this._timerMode;
+    }
+    set timerMode(value) {
+        this._timerMode = value;
+        this.refreshClock();
+        if (value) {
+            $(".timer-set").addClass("toggled");
+            $(".arrow").removeClass("hidden");
+            $(".arrow").removeClass("hidden");
+            $(".am-pm").addClass("hidden");
+            $(".am-pm .arrow").addClass("hidden");
+        }
+        else {
+            $(".timer-set").removeClass("toggled");
+            $(".arrow").addClass("hidden");
+            $(".arrow").addClass("hidden");
+            $(".am-pm").removeClass("hidden");
+            $(".am-pm .arrow").addClass("hidden");
+            if (this.clock.hr24Mode) {
+                $(".alarm-24hr").addClass("toggled");
             }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Main.prototype.toggleAlarmMode = function () {
+            else {
+                $(".alarm-24hr").removeClass("toggled");
+            }
+        }
+    }
+    toggleAlarmMode() {
         this.alarmMode = !this.alarmMode;
-    };
-    Main.prototype.toggleTimerMode = function () {
+    }
+    toggleTimerMode() {
         this.timerMode = !this.timerMode;
-    };
-    Main.prototype.enableBrightness = function () {
+    }
+    enableBrightness() {
         if (this.brightness.style.display == 'none') {
             this.brightness.style.display = 'inline';
         }
@@ -651,26 +665,17 @@ var Main = /** @class */ (function () {
             this.brightness.style.display = 'none';
         }
         ;
-    };
-    Main.prototype.enableVolume = function () {
-        if (this.volume.style.display == 'none') {
-            this.volume.style.display = 'inline';
-        }
-        else {
-            this.volume.style.display = 'none';
-        }
-        ;
-    };
-    Main.prototype.setAlarmColor = function () {
+    }
+    setAlarmColor() {
         this.bgcolor.click();
-    };
-    Main.prototype.toggle24hrMode = function () {
+    }
+    toggle24hrMode() {
         // Best to toggle both to skip confusion
         this.alarm.hr24Mode = this.clock.hr24Mode = !this.clock.hr24Mode;
         this.alarmMode = this.alarmMode;
         localStorage.setItem('mclock.hr24Mode', this.clock.hr24Mode.toString());
-    };
-    Main.prototype.incrementAlarmHours = function () {
+    }
+    incrementAlarmHours() {
         if (this.alarmMode) {
             if (!this.alarm.hr24Mode) {
                 var time12 = this.alarm.time24.to12();
@@ -705,8 +710,8 @@ var Main = /** @class */ (function () {
             }
             this.timer.updateTime();
         }
-    };
-    Main.prototype.decrementAlarmHours = function () {
+    }
+    decrementAlarmHours() {
         if (this.alarmMode) {
             if (!this.alarm.hr24Mode) {
                 var time12 = this.alarm.time24.to12();
@@ -741,8 +746,8 @@ var Main = /** @class */ (function () {
             }
             this.timer.updateTime();
         }
-    };
-    Main.prototype.incrementAlarmMinutes = function () {
+    }
+    incrementAlarmMinutes() {
         if (this.alarmMode) {
             var minutes = this.alarm.time24.minutes;
             minutes++;
@@ -759,8 +764,8 @@ var Main = /** @class */ (function () {
             this.timer.time24.minutes = minutes;
             this.timer.updateTime();
         }
-    };
-    Main.prototype.decrementAlarmMinutes = function () {
+    }
+    decrementAlarmMinutes() {
         if (this.alarmMode) {
             var minutes = this.alarm.time24.minutes;
             minutes--;
@@ -777,87 +782,58 @@ var Main = /** @class */ (function () {
             this.timer.time24.minutes = minutes;
             this.timer.updateTime();
         }
-    };
-    Main.prototype.alarmToAm = function () {
+    }
+    alarmToAm() {
         if (this.alarmMode && !this.alarm.hr24Mode) {
             var time12 = this.alarm.time24.to12();
             time12.pm = false;
             this.alarm.time24 = Time.from12(time12);
             this.alarm.updateTime();
         }
-    };
-    Main.prototype.alarmToPm = function () {
+    }
+    alarmToPm() {
         if (this.alarmMode && !this.alarm.hr24Mode) {
             var time12 = this.alarm.time24.to12();
             time12.pm = true;
             this.alarm.time24 = Time.from12(time12);
             this.alarm.updateTime();
         }
-    };
-    Main.prototype.loadAlarmMelodyFile = function () {
-        $("#alarmTone").click();
-    };
-    Main.prototype.isLoadedAlarmMelodyFile = function () {
-        if ($("#alarmTone").val()) {
-            this.fileReader = new FileReader();
-            this.fileReader.readAsDataURL($('#alarmTone')[0].files[0]);
-            this.fileReader.onloadend = function () {
-                localStorage.setItem('mclock.audio', this.fileReader.result);
-                $("#player")[0].src = this.fileReader.result;
-                this.fileReaderDone = true;
-                $(".alarm-melody").addClass("toggled");
-            }.bind(this);
-        }
-        else {
-            $(".alarm-melody").removeClass("toggled");
-            this.fileReader = undefined;
-        }
-    };
-    Main.prototype.soundAlarm = function () {
-        //$('.rswp__toggle').click();
-        if (this.fileReader !== undefined && this.fileReaderDone) {
-            if (this.alarmPlaying) {
-                $("#player")[0].pause();
-                $("#player")[0].currentTime = 0;
-                $(".alarm-melody-play").removeClass("toggled");
-                this.alarmPlaying = false;
-            }
-            else {
-                $("#player")[0].play();
-                $(".alarm-melody-play").addClass("toggled");
-                this.alarmPlaying = true;
-                // Disable sleep mode in case it was activated
-                $(".alarm-snooze").removeClass("toggled");
-                this.alarmSleepActivated = false;
-            }
-        }
-    };
-    Main.prototype.timerEnable = function () {
+    }
+    soundAlarm() {
+        console.log('soundAlarm...');
+        $('#rswp__play').click();
+    }
+    timerEnable() {
         this.timerEnabled = !this.timerEnabled;
+        localStorage.setItem('mclock.timer.enabled', this.timerEnabled.toString());
         if (this.timerEnabled) {
             $(".timer-enable").prop("checked", true);
-            this.timer.startTime = Math.floor(this.clock.time24.date.getTime() / 1000);
+            let currentTime = Math.floor(this.clock.time24.date.getTime() / 1000);
+            let secondsToWait = (this.timer.time24.hours * 3600) + (this.timer.time24.minutes * 60);
+            this.timer.fireTime = currentTime + secondsToWait;
         }
         else {
             $(".timer-enable").prop("checked", false);
-            this.timer.startTime = 0;
+            this.timer.fireTime = 0;
         }
-    };
-    Main.prototype.alarmEnable = function () {
+        localStorage.setItem('mclock.timer.fireTime', this.timer.fireTime.toString());
+    }
+    alarmEnable() {
         this.alarmEnabled = !this.alarmEnabled;
+        localStorage.setItem('mclock.alarm.enabled', this.alarmEnabled.toString());
         if (this.alarmEnabled) {
-            $(".alarm-enable").addClass("toggled");
+            $(".alarm-enable").prop("checked", true);
         }
         else {
-            $(".alarm-enable").removeClass("toggled");
+            $(".alarm-enable").prop("checked", false);
             // Disable sleep mode in case it was activated
             $(".alarm-snooze").removeClass("toggled");
             this.alarmSleepActivated = false;
             if (this.alarmPlaying)
                 this.soundAlarm();
         }
-    };
-    Main.prototype.alarmSleep = function () {
+    }
+    alarmSleep() {
         // Only if the alarm is playing and enabled
         // and sleep hasnt been activated already
         if (this.alarmPlaying
@@ -884,16 +860,15 @@ var Main = /** @class */ (function () {
             // Disable Toggle snooze button
             $(".alarm-snooze").removeClass("toggled");
         }
-    };
-    Main.prototype.enableAlarmFeatures = function () {
+    }
+    enableAlarmFeatures() {
         if (FileReader) {
             $("button:disabled").prop('disabled', false);
             $(".support").removeClass('not-supported');
             $(".support").addClass('supported');
         }
-    };
-    return Main;
-}());
+    }
+}
 $(function () {
     $('.clock').removeClass('hidden');
     var main = new Main();

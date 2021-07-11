@@ -5,6 +5,7 @@
   "main": "script.js",
   "dependencies": {
     "canvas": "^2.6.1",
+    "electron-widevinecdm": "^7.0.0",
     "nib": "^1.1.2",
     "react-spotify-web-playback": "^0.8.1",
     "stylus": "^0.54.8"

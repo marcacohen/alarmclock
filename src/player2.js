@@ -1172,8 +1172,11 @@
                         },
                         method: "GET"
                     }).then((function(e) {
+                        console.log('device return:', e);
                         return e.json()
-                    }))]
+                    })).catch((error) => {
+                        console.error('Error:', error);
+                    })]
                 }))
             }))
         }
@@ -1562,7 +1565,7 @@
                     "> div": (t = {
                         backgroundColor: n.bgColor,
                         boxShadow: n.altColor ? "1px 1px 10px " + n.altColor : "none"
-                    }, t[n.p] = "120%", t.button = {
+                    }, t[n.p] = "250%", t.button = {
                         color: n.c
                     }, t)
                 }
@@ -2033,7 +2036,7 @@
                                     }),
                                     trackY: fe(fe({}, r), {
                                         height: "100%",
-                                        minHeight: "50px",
+                                        minHeight: "150px",
                                         width: t.width
                                     })
                                 };
@@ -2203,7 +2206,7 @@
                 "> button": {
                     fontSize: N(26)
                 },
-                "@media (max-width: 1023px)": {
+                "@media (max-width: 0px)": {
                     display: "none"
                 }
             }, (function(e) {
@@ -2215,7 +2218,7 @@
                     "> div": (t = {
                         backgroundColor: n.bgColor,
                         boxShadow: n.altColor ? "1px 1px 10px " + n.altColor : "none"
-                    }, t[n.p] = "120%", t)
+                    }, t[n.p] = "250%", t)
                 }
             }), "VolumeRSWP"),
             xe = function(e) {
@@ -2285,14 +2288,14 @@
                                 padding: 0,
                                 rangeColor: l || "#ccc",
                                 trackColor: s,
-                                width: 6
+                                width: 18
                             }
                         },
                         onAfterEnd: this.handleAfterEnd,
                         onChange: this.handleChangeSlider,
                         y: 100 * n,
                         yMin: 0,
-                        yMax: 100
+                        yMax: 10
                     })), r.createElement("button", {
                         type: "button",
                         onClick: t ? void 0 : this.handleClick
@@ -2487,15 +2490,18 @@
                 }
             }, r.createElement("div", null, (!!u.length || t) && r.createElement("button", {
                 type: "button",
+                id: "rswp__prev",
                 onClick: o,
                 "aria-label": "Previous Track"
             }, r.createElement(Me, null))), r.createElement("div", null, r.createElement("button", {
                 type: "button",
+                id: "rswp__play",
                 className: "rswp__toggle",
                 onClick: i,
                 "aria-label": n ? "Pause" : "Play"
             }, n ? r.createElement(Ie, null) : r.createElement(ze, null))), r.createElement("div", null, (!!l.length || t) && r.createElement("button", {
                 type: "button",
+                id: "rswp__next",
                 onClick: a,
                 "aria-label": "Next Track"
             }, r.createElement(Re, null))))
@@ -3156,7 +3162,7 @@
                         x: a,
                         xMin: 0,
                         xMax: 100,
-                        xStep: .1
+                        xStep: .05
                     }))
                 }, t
             }(r.PureComponent),
@@ -3382,6 +3388,7 @@
                     }, a.handleClickTogglePlay = function() {
                         return ut(a, void 0, void 0, (function() {
                             var e, t;
+                            update_player_state();
                             return st(this, (function(n) {
                                 switch (n.label) {
                                     case 0:
@@ -3603,18 +3610,21 @@
                             getOAuthToken: function(e) {
                                 //e(r)
 				console.log('refreshing access token from player');
-				get_access_token();
-				e(access_token);
+				get_access_token(e);
                             },
                             name: n,
                             volume: e
                         }), a.player.addListener("ready", a.handlePlayerStatus), a.player.addListener("not_ready", a.handlePlayerStatus), a.player.addListener("player_state_changed", a.handlePlayerStateChanges), a.player.addListener("initialization_error", (function(e) {
+                            console.error("init error", e.message);
                             return a.handlePlayerErrors("initialization_error", e.message)
                         })), a.player.addListener("authentication_error", (function(e) {
+                            console.error("auth error", e.message);
                             return a.handlePlayerErrors("authentication_error", e.message)
                         })), a.player.addListener("account_error", (function(e) {
+                            console.error("acct error", e.message);
                             return a.handlePlayerErrors("account_error", e.message)
                         })), a.player.addListener("playback_error", (function(e) {
+                            console.error("play error", e.message);
                             return a.handlePlayerErrors("playback_error", e.message)
                         })), a.player.connect()
                     }, a.setAlbumImage = function(e) {
@@ -3721,6 +3731,7 @@
                             }))
                         }))
                     }, a.togglePlay = function(e) {
+                        console.log('togglePlay');
                         return void 0 === e && (e = !1), ut(a, void 0, void 0, (function() {
                             var t, n, r, a, o, i, l, u, s, c, p, h, v = this;
                             return st(this, (function(y) {
@@ -3819,7 +3830,7 @@
                         progressMs: 0,
                         status: D.IDLE,
                         track: a.emptyTrack,
-                        volume: W(t.initialVolume) || 1
+                        volume: .05 // W(t.initialVolume) || 1
                     }, a.styles = (n = t.styles, P({
                         activeColor: "#1cb954",
                         altColor: "#ccc",

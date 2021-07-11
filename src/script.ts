@@ -14,14 +14,16 @@ let access_token = '';
 let refresh_token = '';
 let refresh_tokens = {
   'NW3': 'AQBMSznXPzgILC05wR1QcaKoANYK8yMTzAPgxCQxIazw6Xfj05v21AkmXg22_CS0GrU2gMP3zTAj9lesYTqj1OXrzbyK5vd4a3VI8j1CITeEg98YAqyK22ZZ1bcI02XcN5k',
-  'N1':  'AQDqNRCjRDSC9r9iLhHJ3HHNXgNshIzLtSJgdQcVRumllj_1r2EvZZBKaiYd7jF923wRK93uO9dqubjjxJZ8vuLCEghh7rFYICeZrSOwNcMwUWX0Rr0MqPmEC7aCXepvP6k',
+  'N7':  'AQDqNRCjRDSC9r9iLhHJ3HHNXgNshIzLtSJgdQcVRumllj_1r2EvZZBKaiYd7jF923wRK93uO9dqubjjxJZ8vuLCEghh7rFYICeZrSOwNcMwUWX0Rr0MqPmEC7aCXepvP6k',
+  'KT1': 'AQAsKO6FmFKlvvIMtV5N714k_XC9Nt7g-Gg-qMLH-DirrBzZ_YLT2jGzs0zCsUdy27KGFwrjy-XGyx8rvsjZFaSBk_wExFyg6aCQfEuJ9lOMLzpTwALMQwngYK_k4znzoIM',
   'KT3': 'AQAsKO6FmFKlvvIMtV5N714k_XC9Nt7g-Gg-qMLH-DirrBzZ_YLT2jGzs0zCsUdy27KGFwrjy-XGyx8rvsjZFaSBk_wExFyg6aCQfEuJ9lOMLzpTwALMQwngYK_k4znzoIM'
 };
 
 let playlist = '';
 let playlists = {
-  'NW3': 'spotify:playlist:2IlCUBWJCOvGSXGUIZuS0Q',
-  'N1':  'spotify:playlist:3LeuIBk2eYwgu8fdCwBOfo',
+  'NW3': 'spotify:playlist:3o3goJjfPyyIYdkYOO9ET0',
+  'N7':  'spotify:playlist:3LeuIBk2eYwgu8fdCwBOfo',
+  'KT1': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW',
   'KT3': 'spotify:playlist:0UYMHbx6N8oeVo5Bo1TpGW'
 };
 
@@ -66,33 +68,82 @@ function get_refresh_token_and_playlist() {
 	}
 }
 
-function get_access_token() {
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-        	if (this.readyState == 4 && this.status == 200) {
-			let data = JSON.parse(xmlHttp.responseText);
-			if ('access_token' in data) {
-				access_token = data['access_token'];
-				console.log('access token: ' + access_token);
-				localStorage.setItem('rswp_token', access_token);
-			} else {
-				console.log('access token not found in refresh response');
-			}
-        	};
-	};
-    	xmlHttp.open('POST', 'https://accounts.spotify.com/api/token', false); 
-	xmlHttp.setRequestHeader('Authorization', 'Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI');
-	xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+async function get_access_token(callback) {
+        let auth_str = 'Basic OTgyOTVhZDYzYTExNGNmMzk4MjU0OTBmMzcyODFjMzY6MjBhZjkwZTA3MzFlNGQ3ZmFmMzAzZDIzZGVlYWMxNjI';
 	let body = 'grant_type=refresh_token&refresh_token=' + refresh_token;
-	try {
-    		xmlHttp.send(body);
-	} catch {
+        let url = 'https://accounts.spotify.com/api/token';
+        $.ajax(url, {
+            type: 'POST',
+            data: body,
+            dataType: 'json',
+            headers: {
+	        'Authorization': auth_str,
+	        'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            success: function (data, status, xhr) {
+                if ('access_token' in data) {
+                    console.log('access token found in refresh response');
+                    access_token = data['access_token'];
+                } else {
+                    console.log('access token not found in refresh response');
+                }
+            },
+            error: function(data, stastus, xhr) {
 		console.log('error sending refresh request');
+	    }
+        });
+        for (let i = 0; i < 20 && !access_token; i++) {
+           console.log('waiting for access token...');
+           await new Promise(r => setTimeout(r, 100));
+        }
+        console.log('got new access token: ' + access_token);
+        localStorage.setItem('rswp_token', access_token);
+        callback(access_token);
+}
+
+let shuffle = false;
+
+async function enable_shuffle(device_id) {
+	console.log('enable shuffle');
+        if (shuffle) {
+            console.log('shuffle already enabled');
+            return;
+        }
+        shuffle = true;
+        await new Promise(r => setTimeout(r, 100));
+        let url = 'https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=' + device_id;
+        $.ajax(url, {
+            type: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            success: async function (data, status, xhr) {
+                console.log('shuffle set');
+                await new Promise(r => setTimeout(r, 200));
+		$('#rswp__next').click();
+            },
+            error: function(data, stastus, xhr) {
+                shuffle = false;
+		console.log('error enabling shuffle');
+	    }
+        });
+}
+
+function update_player_state() {
+	console.log('player state update');
+	let m = window.main;
+	if(m.alarmPlaying) {
+		m.alarmPlaying = false;
+	} else {
+		m.alarmPlaying = true;
+		// Disable sleep mode in case it was activated
+		$(".alarm-snooze").removeClass("toggled");
+		m.alarmSleepActivated = false;
 	}
 }
 
-$(document).ready(function()
-{ 
+$(document).ready(function() {
     let version = $('#version').text();
     console.log('version: ' + version);
     if (version == '1.1') {
@@ -102,6 +153,13 @@ $(document).ready(function()
     $(document).bind("contextmenu",function(e){
         return false;
     }); 
+    setInterval(() => {
+	let m = window.main;
+	if(!m.alarmPlaying) {
+            console.log('reloading...');
+            window.location.reload();
+        }
+    }, 1800000);
 });
 
 // Required interface for 12 hour import/export format
@@ -417,8 +475,6 @@ class Clock
 			localStorage.setItem('mclock.alarm.minutes', this.time24.minutes.toString());
 			localStorage.setItem('mclock.alarm.pm', this.time24.to12().pm.toString());
 		} else if (this.isTimer) {
-			this.secondsToWait = (this.time24.hours * 3600) + (this.time24.minutes * 60)
-			console.log(this.secondsToWait);
 			if (saveTimer) {
 				localStorage.setItem('mclock.timer.hours', this.time24.hours.toString());
 				localStorage.setItem('mclock.timer.minutes', this.time24.minutes.toString());
@@ -455,8 +511,7 @@ class Clock
 	time24: Time;
 	isAlarm: boolean;
 	isTimer: boolean;
-	secondsToWait: number;
-	startTime: number;
+	fireTime: number;
 }
 
 /*
@@ -485,15 +540,6 @@ class Main {
 		let color = localStorage.getItem('mclock.bgcolor');
 		if (!color) {
 			color = '#2e5090';
-		}
-
-		let audio = localStorage.getItem('mclock.audio');
-		if (audio) {
-			this.fileReader = new FileReader();
-			this.fileReaderDone = true;
-			$("#player")[0].src = audio;
-			$("#player")[0].volume = .1;
-			$(".alarm-melody").addClass("toggled");
 		}
 
 		// Create the clock
@@ -533,7 +579,8 @@ class Main {
 			this.timer.time24.minutes = parseInt(tminutes);
 		}
 
-        	this.alarmMode = false;
+		this.alarmMode = false;
+
 		let hr24Mode = localStorage.getItem('mclock.hr24Mode') == 'true';
 		if (hr24Mode != this.clock.hr24Mode) {
 			this.toggle24hrMode();
@@ -543,6 +590,8 @@ class Main {
         this.enableAlarmFeatures();
 
         // Wireup some event handlers
+	$('.viewport').click(this.hideCalendar);
+	$('#date').click(this.showCalendar);
 	$(".brightness").click(this.enableBrightness.bind(this));
 	this.brightness = document.querySelector("#brightness");
 	this.brightness.value = brightness;
@@ -550,12 +599,7 @@ class Main {
   	this.brightness.addEventListener("input", this.updateBrightness.bind(this), false);
 	this.brightness.select();
 
-	$(".volume").click(this.enableVolume.bind(this));
-	this.volume = document.querySelector("#volume");
-	this.volume.value = volume;
-	this.setVolume(volume);
-  	this.volume.addEventListener("input", this.updateVolume.bind(this), false);
-	this.volume.select();
+	//this.setVolume(volume);
 
         $(".alarm-set").click(this.toggleAlarmMode.bind(this));
         $(".timer-set").click(this.toggleTimerMode.bind(this));
@@ -577,15 +621,22 @@ class Main {
         $(".am-pm .up").click(this.alarmToAm.bind(this));
         $(".am-pm .down").click(this.alarmToPm.bind(this));
 
-        $(".alarm-melody").click(this.loadAlarmMelodyFile.bind(this));
-        $("#alarmTone").change(this.isLoadedAlarmMelodyFile.bind(this));
-
-        $(".alarm-melody-play").click(this.soundAlarm.bind(this));
-
         this.alarmEnabled = false;
         $(".alarm-enable").click(this.alarmEnable.bind(this));
+	let alarmEnabled = localStorage.getItem('mclock.alarm.enabled');
+	if (alarmEnabled && alarmEnabled == 'true') {
+		this.alarmEnable();
+	}
+
         this.timerEnabled = false;
         $(".timer-enable").click(this.timerEnable.bind(this));
+	let timerEnabled = localStorage.getItem('mclock.timer.enabled');
+	let fireTime = localStorage.getItem('mclock.timer.fireTime');
+	if (timerEnabled && timerEnabled == 'true' && fireTime) {
+		this.timer.fireTime = parseInt(fireTime);
+		this.timerEnabled = !this.timerEnabled;
+		$(".timer-enable").prop("checked", true);
+	}
 
         this.alarmSleepActivated = false;
         this.countdownTimerActivated = false;
@@ -614,21 +665,25 @@ class Main {
 		}
 	}
 	
+	showCalendar() {
+console.log('showing cal');
+		$('#calendar').css('display', 'inline');
+return false;
+	}
+
+	hideCalendar() {
+console.log('hiding cal');
+		$('#calendar').css('display', 'none');
+	}
+
 	setVolume(volume) {
 		localStorage.setItem('mclock.volume', volume);
-		$("#player")[0].volume = volume;
 	}
 
 	updateBrightness(ev) {
 		let brightness = ev.target.value;
 		this.setBrightness(brightness);
 	}
-
-	updateVolume(ev) {
-		let volume = ev.target.value;
-		this.setVolume(volume);
-	}
-
 
 	// Gets called every second
 	updateClock() {
@@ -657,14 +712,8 @@ class Main {
 		if (!this.timerMode)
 		{
 			if (this.timerEnabled) {
-				var startTime = this.timer.startTime;
-				var secondsToWait = this.timer.secondsToWait;
 				var currentSeconds = Math.floor(this.clock.time24.date.getTime() / 1000)
-				//console.log('startTime:', startTime);
-				//console.log('secondsToWait:', secondsToWait);
-				//console.log('currentSeconds:', currentSeconds);
-
-				if (startTime + secondsToWait < currentSeconds) {
+				if (this.timer.fireTime < currentSeconds) {
 					this.soundAlarm();
 					this.timerEnable();
 				}
@@ -771,14 +820,6 @@ class Main {
 			this.brightness.style.display = 'inline';
 		} else {
 			this.brightness.style.display = 'none';
-		};
-	}
-
-	enableVolume() {
-		if (this.volume.style.display == 'none') {
-			this.volume.style.display = 'inline';
-		} else {
-			this.volume.style.display = 'none';
 		};
 	}
 
@@ -919,79 +960,38 @@ class Main {
 		}
 	}
 
-	loadAlarmMelodyFile()
-	{
-		$("#alarmTone").click();
-	}
-
-	isLoadedAlarmMelodyFile()
-	{
-		if($("#alarmTone").val())
-		{
-			this.fileReader = new FileReader();
-			this.fileReader.readAsDataURL($('#alarmTone')[0].files[0]);
-
-			this.fileReader.onloadend = function() {
-				localStorage.setItem('mclock.audio', this.fileReader.result);
-				$("#player")[0].src = this.fileReader.result;
-				this.fileReaderDone = true;
-				$(".alarm-melody").addClass("toggled");
-			}.bind(this);
-		}
-		else
-		{
-			$(".alarm-melody").removeClass("toggled");
-			this.fileReader = undefined;
-		}
-	}
-
-	soundAlarm()
-	{
-		//$('.rswp__toggle').click();
-		if(this.fileReader !== undefined && this.fileReaderDone)
-		{
-			if(this.alarmPlaying)
-			{
-				$("#player")[0].pause();
-				$("#player")[0].currentTime = 0;
-				$(".alarm-melody-play").removeClass("toggled");
-				this.alarmPlaying = false;
-			}
-			else
-			{
-				$("#player")[0].play();
-				$(".alarm-melody-play").addClass("toggled");
-				this.alarmPlaying = true;
-
-				// Disable sleep mode in case it was activated
-				$(".alarm-snooze").removeClass("toggled");
-				this.alarmSleepActivated = false;
-			}
-		}
+	soundAlarm() {
+                console.log('soundAlarm...');
+		$('#rswp__play').click();
 	}
 
 	timerEnable() {
 		this.timerEnabled = !this.timerEnabled;
+                localStorage.setItem('mclock.timer.enabled', this.timerEnabled.toString());
 		if(this.timerEnabled) {
 			$(".timer-enable").prop("checked", true);
-			this.timer.startTime = Math.floor(this.clock.time24.date.getTime() / 1000);
+			let currentTime = Math.floor(this.clock.time24.date.getTime() / 1000);
+			let secondsToWait = (this.timer.time24.hours * 3600) + (this.timer.time24.minutes * 60)
+			this.timer.fireTime = currentTime + secondsToWait;
 		} else {
 			$(".timer-enable").prop("checked", false);
-			this.timer.startTime = 0
+			this.timer.fireTime = 0
 		}
+		localStorage.setItem('mclock.timer.fireTime', this.timer.fireTime.toString());
 	}
 
 	alarmEnable()
 	{
 		this.alarmEnabled = !this.alarmEnabled;
+                localStorage.setItem('mclock.alarm.enabled', this.alarmEnabled.toString());
 
 		if(this.alarmEnabled)
 		{
-			$(".alarm-enable").addClass("toggled");
+			$(".alarm-enable").prop("checked", true);
 		}
 		else
 		{
-			$(".alarm-enable").removeClass("toggled");
+			$(".alarm-enable").prop("checked", false);
 
 			// Disable sleep mode in case it was activated
 			$(".alarm-snooze").removeClass("toggled");
@@ -1052,7 +1052,6 @@ class Main {
 	count: number;
 	bgcolor: any;
 	brightness: any;
-	volume: any;
 	clock: Clock;
 	alarm: Clock;
 	timer: Clock;

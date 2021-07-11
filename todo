@@ -8,13 +8,16 @@ X add auto-start on rpy
 X wire up speaker
 X fine tune display
 X add easy brightness control
-- sleep timer
-- interval timer
-- bug: snooze updates alarm setting
+X sleep timer
+X interval timer
+X spotify streaming!
+X add random play function
+- save chrome local storage across docker run sessions
 
 future
+- bug: snooze updates alarm setting
+- make play volume slider bigger
 - add daily random background color 
-- add random play function
 - reposition color picker dialog near button
 - make up/down controls more intuitive
 - add calendar widget
