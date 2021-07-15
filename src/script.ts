@@ -22,7 +22,7 @@ $(document).ready(function() {
             console.log('reloading...');
             window.location.reload();
         }
-    }, 1800000);
+    }, 28800000);
 });
 
 // Required interface for 12 hour import/export format
